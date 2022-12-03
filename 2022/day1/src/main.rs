@@ -1,14 +1,17 @@
 use regex::Regex;
 use std::fs;
 
+#[derive(Debug, Clone, PartialEq)]
 struct Elf {
+    id: i32,
     snacks: Vec<i32>,
     total_calories: i32,
 }
 
 impl Elf {
-    fn new() -> Elf {
+    fn new(id: i32) -> Elf {
         Elf {
+            id: id,
             snacks: Vec::new(),
             total_calories: 0,
         }
@@ -25,8 +28,8 @@ fn main() {
     let mut elves: Vec<Elf> = Vec::new();
     let contents: String = fs::read_to_string("data/input.txt").unwrap();
     let re = Regex::new(r"(\n[\n\r])").unwrap();
-    for snacks in re.split(&contents) {
-        let mut elf = Elf::new();
+    for (i, snacks) in re.split(&contents).enumerate() {
+        let mut elf = Elf::new(i.try_into().unwrap());
         for snack in snacks.trim().split('\n') {
             elf.add_snack(snack.trim().parse::<i32>().unwrap());
         }
@@ -34,16 +37,37 @@ fn main() {
     }
 
     // Part 1: find the elf with most calories in snacks
-    let mut max_calories: i32 = 0;
-    let mut max_elf_idx: usize = 0;
-    for i in 0..elves.len() {
-        let elf: &Elf = &elves[i];
-        if elf.total_calories >= max_calories {
-            max_calories = elf.total_calories;
-            max_elf_idx = i;
+    let mut top_elves: Vec<&Elf> = Vec::new();
+    const TOP_NUM: i32 = 3;
+    // initialize top elves
+    for i in 0..TOP_NUM {
+        top_elves.push(&elves[i as usize]);
+    }
+    // compare against top elves
+    for i in TOP_NUM..(elves.len() as i32) {
+        for j in 0..TOP_NUM {
+            if elves[i as usize].total_calories > top_elves[j as usize].total_calories {
+                if top_elves.contains(&&elves[i as usize]) == false {
+                    top_elves.insert(j as usize, &elves[i as usize]);
+                }
+            }
         }
     }
-    println!("Elf {max_elf_idx} has the maximum amount of calories in snacks: {max_calories}");
+    let mut sum_of_top: i32 = 0;
+    for (i, elf) in top_elves.iter().enumerate() {
+        if i >= TOP_NUM as usize {
+            break;
+        }
+        println!(
+            "{}: Elf {} has calories in snacks: {}",
+            elf.id, i, elf.total_calories
+        );
+        sum_of_top += elf.total_calories as i32;
+    }
+    println!(
+        "Sum of top {} Elves' snacks' calories is {}",
+        TOP_NUM, sum_of_top
+    );
 
     // Part 2: find the elf with most calories in snacks
 }
