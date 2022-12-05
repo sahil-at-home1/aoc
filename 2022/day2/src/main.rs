@@ -91,19 +91,20 @@ impl fmt::Display for Game {
 }
 
 fn main() {
-    let contents: String = fs::read_to_string("data/input.txt").unwrap();
+    let contents: String = fs::read_to_string("data/test.txt").unwrap();
     let mut games: Vec<Game> = Vec::new();
     for line in contents.split("\n") {
         if line.trim() == "" {
             continue;
         }
         let mut letters: Vec<String> = line.split(" ").map(String::from).collect();
-        let op_choice = Shape::new(letters.pop().unwrap());
         let my_choice = Shape::new(letters.pop().unwrap());
+        let op_choice = Shape::new(letters.pop().unwrap());
         games.push(Game::new(op_choice, my_choice));
     }
     let mut total_points: i32 = 0;
     for game in games {
+        println!("{}", game);
         total_points += game.points();
     }
     println!("Total points: {}", total_points);
