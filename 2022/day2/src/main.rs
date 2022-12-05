@@ -91,7 +91,7 @@ impl fmt::Display for Game {
 }
 
 fn main() {
-    let contents: String = fs::read_to_string("data/test.txt").unwrap();
+    let contents: String = fs::read_to_string("data/input.txt").unwrap();
     let mut games: Vec<Game> = Vec::new();
     for line in contents.split("\n") {
         if line.trim() == "" {
