@@ -1,8 +1,26 @@
-use std::{collections::HashMap, hash::Hash};
+enum Shape {
+    rock,
+    paper,
+    scissors,
+}
 
-const shape_to_point_map: HashMap<&str, i32> =
-    HashMap::from([("Rock", 1), ("Paper", 2), ("Scissors", 3)]);
+impl Shape {
+    fn points_value(&self) -> i32 {
+        return match self {
+            Shape::rock => 1,
+            Shape::paper => 1,
+            Shape::scissors => 1,
+        };
+    }
+}
+
+enum GameResult {
+    win,
+    loss,
+    draw,
+}
 
 fn main() {
-    println!("Hello, world!");
+    let shape = Shape::rock;
+    println!("Hello, world! {}", shape.points_value());
 }
