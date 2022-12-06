@@ -48,7 +48,7 @@ fn item_to_value(item: char) -> i32 {
 }
 
 fn main() {
-    let contents: String = fs::read_to_string("data/test.txt").unwrap();
+    let contents: String = fs::read_to_string("data/input.txt").unwrap();
     // let mut rucksacks: Vec<Rucksack> = Vec::new();
     let mut item_sum: i32 = 0;
 
