@@ -21,35 +21,21 @@ fn main() {
         }
         section_pairs.push(pair);
     }
-    let mut num_fully_contained_pairs: i32 = 0;
+    let mut num_overlapping_pairs: i32 = 0;
     for pair in section_pairs {
         println!("{:?}", pair);
-        let mut is_fully_contained: bool = true;
+        let mut is_overlapping: bool = false;
         for num in pair[0].clone().unwrap() {
-            if !pair[1].clone().unwrap().contains(&num) {
-                is_fully_contained = false;
+            if pair[1].clone().unwrap().contains(&num) {
+                is_overlapping = true;
                 break;
             }
         }
-        if is_fully_contained {
-            num_fully_contained_pairs += 1;
-            continue;
-        }
-        is_fully_contained = true;
-        for num in pair[1].clone().unwrap() {
-            if !pair[0].clone().unwrap().contains(&num) {
-                is_fully_contained = false;
-                break;
-            }
-        }
-        if is_fully_contained {
-            num_fully_contained_pairs += 1;
+        if is_overlapping {
+            num_overlapping_pairs += 1;
             continue;
         }
     }
 
-    println!(
-        "Number of fully contained pairs: {}",
-        num_fully_contained_pairs
-    );
+    println!("Number of overlapping pairs: {}", num_overlapping_pairs);
 }
