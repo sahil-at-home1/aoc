@@ -4,10 +4,13 @@ type Section = Option<Vec<i32>>;
 type SectionPair = [Section; 2];
 
 fn main() {
-    let contents: String = fs::read_to_string("data/test.txt").unwrap();
+    let contents: String = fs::read_to_string("data/input.txt").unwrap();
     let mut section_pairs: Vec<SectionPair> = Vec::new();
 
     for line in contents.split('\n') {
+        if line.trim().is_empty() {
+            continue;
+        }
         let sections: Vec<&str> = line.split(',').collect();
         let mut pair: SectionPair = [None, None];
         for i in 0..sections.len() {
