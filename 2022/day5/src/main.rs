@@ -1,14 +1,16 @@
 use std::fs;
 
 fn main() {
-    let input: String = fs::read_to_string("data/test.txt").unwrap();
+    let input: String = fs::read_to_string("data/input.txt").unwrap();
     let mut stacks: Vec<Vec<char>> = Vec::new();
     // read the lines backwards
     for line in input.lines().rev() {
-        // skip arrange steps, but use stack number step
+        // skip arrange steps,
         if line.contains("move") || line.trim().is_empty() {
             continue;
-        } else if line.contains("1") {
+        }
+        // use number of stacks to initialize list of stacks
+        if line.contains("1") {
             let nums: Vec<&str> = line.split_whitespace().collect();
             let num_stacks: usize = nums[nums.len() - 1].parse().unwrap();
             for _ in 0..num_stacks {
@@ -27,7 +29,7 @@ fn main() {
                 stack.push(item);
             }
             // integer division
-            stack_idx = i / 3;
+            stack_idx = i / 4;
         }
     }
     for stack in &stacks {
@@ -44,7 +46,6 @@ fn main() {
         let to_idx: usize = words[5].parse::<usize>().unwrap() - 1;
         for _ in 0..num_to_move {
             println!("moving item from {} to {}", from_idx, to_idx);
-
             let item_to_move: char = stacks[from_idx].pop().unwrap();
             stacks[to_idx].push(item_to_move);
         }
