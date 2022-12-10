@@ -44,10 +44,25 @@ fn main() {
         let num_to_move: usize = words[1].parse::<usize>().unwrap();
         let from_idx: usize = words[3].parse::<usize>().unwrap() - 1;
         let to_idx: usize = words[5].parse::<usize>().unwrap() - 1;
-        for _ in 0..num_to_move {
-            println!("moving item from {} to {}", from_idx, to_idx);
-            let item_to_move: char = stacks[from_idx].pop().unwrap();
-            stacks[to_idx].push(item_to_move);
+        if num_to_move > 1 {
+            println!(
+                "moving {} items from {} to {}",
+                num_to_move, from_idx, to_idx
+            );
+            let mut temp_stack: Vec<char> = Vec::new();
+            for _ in 0..num_to_move {
+                let item_to_move: char = stacks[from_idx].pop().unwrap();
+                temp_stack.push(item_to_move);
+            }
+            for _ in 0..num_to_move {
+                stacks[to_idx].push(temp_stack.pop().unwrap());
+            }
+        } else {
+            for _ in 0..num_to_move {
+                println!("moving item from {} to {}", from_idx, to_idx);
+                let item_to_move: char = stacks[from_idx].pop().unwrap();
+                stacks[to_idx].push(item_to_move);
+            }
         }
     }
     // print the items on the top of each stack
