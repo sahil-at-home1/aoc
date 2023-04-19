@@ -1,7 +1,19 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(day6)
+project(day6 VERSION 0.1.0)
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W3")
+include(CTest)
+enable_testing()
 
-add_executable(day6 main.cpp)
+add_library(day6 day6.cpp)
+
+add_executable(main main.cpp)
+add_executable(day6_test day6_test.cpp)
+
+target_link_libraries(day6_test day6)
+target_link_libraries(main day6)
+
+add_test(day6_test day6_test)
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)
