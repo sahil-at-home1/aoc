@@ -3,6 +3,6 @@
 
 #include <string>
 
-int get_packet_idx(std::string line, size_t packet_length);
+int get_packet_idx(std::string line, int packet_length);
 
 #endif

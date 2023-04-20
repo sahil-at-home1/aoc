@@ -8,11 +8,11 @@ using namespace std;
 
 int main()
 {
-    const size_t packet_length = 14;
+    const int packet_length = 14;
     string line = "";
     ifstream fin = ifstream("input.txt");
 
-    // read input size_to a string
+    // read input into a string
     while (getline(fin, line))
     {
         cout << "read a line." << endl;

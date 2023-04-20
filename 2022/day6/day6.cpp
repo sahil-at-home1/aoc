@@ -6,21 +6,27 @@
 
 using namespace std;
 
-int get_packet_idx(string line, size_t packet_length)
+int get_packet_idx(string line, int packet_length)
 {
-    size_t packet_idx = 0;
-    size_t valid_char_count = 0;
+    int packet_idx = 0;
+    int valid_char_count = 0;
 
     // parse each char of the string
-    for (size_t i = (packet_length - 1); i < line.length(); i++)
+    for (int i = 0; i < line.length(); i++)
     {
         // check if char is in previous packet chars
+        char test_char = line[i];
         valid_char_count += 1;
-        for (size_t j = 1; j < packet_length; j++)
+        for (int j = 1; j < packet_length; j++)
         {
-            if (line[i] == line[i - j])
+            if ((i - j) < 0)
             {
-                valid_char_count = 0;
+                break;
+            }
+            char compare_char = line[i - j];
+            if (test_char == compare_char)
+            {
+                valid_char_count -= packet_length - j;
                 break;
             }
         }
@@ -31,5 +37,5 @@ int get_packet_idx(string line, size_t packet_length)
             break;
         }
     }
-    return int(packet_idx);
+    return int(packet_idx + 1);
 }
