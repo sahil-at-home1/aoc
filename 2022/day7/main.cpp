@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class MyFile {
@@ -15,6 +16,10 @@ class MyDir {
     int                 size;
     std::vector<MyFile> files;
     std::vector<MyDir>  dirs;
+
+  public:
+    void add_file();
+    void add_dir();
 };
 
 int main() {
@@ -27,6 +32,7 @@ int main() {
         return 1;
     }
 
+    // read file line by line
     while (getline(f, line)) {
         // split line by spaces
         const std::string        delim = " ";
@@ -36,10 +42,15 @@ int main() {
         while (end != std::string::npos) {
             words.push_back(line.substr(start, end + 1));
         }
+
+        std::unordered_map<std::string, MyDir *> dirs; // map of names to dirs
+        MyDir                                   *cur_dir = new MyDir;
         // check what command was given
         if (words[0] == "$") {
             if (words[0] == "ls") {
+                // pass
             } else if (words[0] == "cd") {
+                cur_dir = dirs[words[1]];
             } else {
                 throw std::exception("invalid command");
             }
@@ -49,3 +60,5 @@ int main() {
     }
     f.close();
 }
+
+void handle_cd() {}
