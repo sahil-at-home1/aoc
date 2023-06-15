@@ -42,7 +42,8 @@ int main() {
     string   line;
     ifstream f;
 
-    f.open("C:/Users/sahil/dev/aoc/2022/day7/input.txt");
+    // f.open("C:/Users/sahil/dev/aoc/2022/day7/input.txt");
+    f.open("C:/Users/sahil/dev/aoc/2022/day7/ez_input.txt");
     if (!f.is_open()) {
         cout << "could not open file" << endl;
         return 1;
@@ -79,11 +80,11 @@ int main() {
                 throw exception("invalid command");
             }
         } else {
-            if (words[1] == "dir") {
-                cur_dir->add_dir(new MyDir(words[2]));
+            if (words[0] == "dir") {
+                cur_dir->add_dir(new MyDir(words[1]));
             } else {
-                int    size = stoi(words[1]);
-                string file_name = words[2];
+                int    size = stoi(words[0]);
+                string file_name = words[1];
                 cur_dir->add_file(new MyFile(file_name, size));
             }
         }
