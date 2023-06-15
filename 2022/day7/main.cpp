@@ -5,59 +5,80 @@
 #include <unordered_map>
 #include <vector>
 
+using namespace std;
+
 class MyFile {
   public:
-    int         size;
-    std::string name;
+    int    size;
+    string name;
+
+  public:
+    MyFile(string name, int size) {
+        this->name = name;
+        this->size = size;
+    }
 };
 
 class MyDir {
   public:
-    int                 size;
-    std::vector<MyFile> files;
-    std::vector<MyDir>  dirs;
+    int              size;
+    vector<MyFile *> files;
+    vector<MyDir *>  dirs;
+    string           name;
 
   public:
-    void add_file();
-    void add_dir();
+    MyDir(string name) { this->name = name; }
+    void add_file(MyFile *file) { this->files.push_back(file); }
+    void add_dir(MyDir *dir) { this->dirs.push_back(dir); }
 };
 
 int main() {
-    std::string   line;
-    std::ifstream f;
+    string   line;
+    ifstream f;
 
     f.open("day7/input.txt");
     if (!f.is_open()) {
-        std::cout << "could not open file" << std::endl;
+        cout << "could not open file" << endl;
         return 1;
     }
+
+    // map of names to dirs
+    unordered_map<string, MyDir *> dirs;
+    MyDir                         *cur_dir = nullptr;
 
     // read file line by line
     while (getline(f, line)) {
         // split line by spaces
-        const std::string        delim = " ";
-        std::vector<std::string> words;
-        int                      start = 0;
-        int                      end = line.find(delim);
-        while (end != std::string::npos) {
+        const string   delim = " ";
+        vector<string> words;
+        int            start = 0;
+        int            end = line.find(delim);
+        while (end != string::npos) {
             words.push_back(line.substr(start, end + 1));
         }
 
-        std::unordered_map<std::string, MyDir *> dirs; // map of names to dirs
-        MyDir                                   *cur_dir = new MyDir;
         // check what command was given
         if (words[0] == "$") {
-            if (words[0] == "ls") {
+            if (words[1] == "ls") {
                 // pass
-            } else if (words[0] == "cd") {
-                cur_dir = dirs[words[1]];
+            } else if (words[1] == "cd") {
+                cur_dir = dirs[words[2]];
             } else {
-                throw std::exception("invalid command");
+                throw exception("invalid command");
             }
         } else {
-            // its a directory list
+            if (words[1] == "dir") {
+                cur_dir->add_dir(new MyDir(words[2]));
+            } else {
+                cur_dir->add_file(new MyFile(words[2], stoi(words[1])));
+            }
         }
     }
+
+    for (auto item : dirs) {
+        cout << item.first << " : " << item.second << endl;
+    }
+
     f.close();
 }
 
