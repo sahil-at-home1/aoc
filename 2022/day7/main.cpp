@@ -17,6 +17,9 @@ class MyFile {
         this->name = name;
         this->size = size;
     }
+    friend std::ostream &operator<<(std::ostream &os, const MyFile &file) {
+        return os << "(" << file.name << ", " << file.size << ")";
+    }
 };
 
 class MyDir {
@@ -27,7 +30,10 @@ class MyDir {
     string           name;
 
   public:
-    MyDir(string name) { this->name = name; }
+    MyDir(string name) {
+        this->name = name;
+        this->size = 0;
+    }
     void add_file(MyFile *file) {
         this->files.push_back(file);
         this->size += file->size;
@@ -35,6 +41,9 @@ class MyDir {
     void add_dir(MyDir *dir) {
         this->dirs.push_back(dir);
         this->size += dir->size;
+    }
+    friend std::ostream &operator<<(std::ostream &os, const MyDir &dir) {
+        return os << "(" << dir.name << ", " << dir.size << ")";
     }
 };
 
@@ -91,7 +100,7 @@ int main() {
     }
 
     for (auto item : dirs) {
-        cout << item.first << " : " << item.second << endl;
+        cout << item.first << " : " << *(item.second) << endl;
     }
 
     f.close();
