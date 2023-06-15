@@ -28,15 +28,21 @@ class MyDir {
 
   public:
     MyDir(string name) { this->name = name; }
-    void add_file(MyFile *file) { this->files.push_back(file); }
-    void add_dir(MyDir *dir) { this->dirs.push_back(dir); }
+    void add_file(MyFile *file) {
+        this->files.push_back(file);
+        this->size += file->size;
+    }
+    void add_dir(MyDir *dir) {
+        this->dirs.push_back(dir);
+        this->size += dir->size;
+    }
 };
 
 int main() {
     string   line;
     ifstream f;
 
-    f.open("day7/input.txt");
+    f.open("C:/Users/sahil/dev/aoc/2022/day7/input.txt");
     if (!f.is_open()) {
         cout << "could not open file" << endl;
         return 1;
@@ -51,17 +57,23 @@ int main() {
         // split line by spaces
         const string   delim = " ";
         vector<string> words;
-        int            start = 0;
-        int            end = line.find(delim);
+        size_t         end = line.find(delim);
         while (end != string::npos) {
-            words.push_back(line.substr(start, end + 1));
+            words.push_back(line.substr(0, end));
+            line = line.substr(end + delim.length(), line.length());
+            end = line.find(delim);
         }
+        words.push_back(line);
 
         // check what command was given
         if (words[0] == "$") {
             if (words[1] == "ls") {
                 // pass
             } else if (words[1] == "cd") {
+                // create new directory if never seen before
+                if (dirs.find(words[2]) == dirs.end()) {
+                    dirs.insert(make_pair(words[2], new MyDir(words[2])));
+                }
                 cur_dir = dirs[words[2]];
             } else {
                 throw exception("invalid command");
@@ -70,7 +82,9 @@ int main() {
             if (words[1] == "dir") {
                 cur_dir->add_dir(new MyDir(words[2]));
             } else {
-                cur_dir->add_file(new MyFile(words[2], stoi(words[1])));
+                int    size = stoi(words[1]);
+                string file_name = words[2];
+                cur_dir->add_file(new MyFile(file_name, size));
             }
         }
     }
