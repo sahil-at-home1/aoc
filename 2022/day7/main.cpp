@@ -17,8 +17,9 @@ class MyFile {
         this->name = name;
         this->size = size;
     }
-    friend std::ostream &operator<<(std::ostream &os, const MyFile &file) {
-        return os << "(" << file.name << ", " << file.size << ")";
+    friend std::ostream &operator<<(std::ostream &out, const MyFile &file) {
+        out << "MyFile(" << file.name << ", " << file.size << ")";
+        return out;
     }
 };
 
@@ -36,10 +37,32 @@ class MyDir {
     }
     void                 add_dir(MyDir *dir) { this->dirs.push_back(dir); }
     void                 add_file(MyFile *file) { this->files.push_back(file); }
-    friend std::ostream &operator<<(std::ostream &os, const MyDir &dir) {
-        return os << "(" << dir.name << ", " << dir.size << ")";
+    friend std::ostream &operator<<(std::ostream &out, const MyDir &dir) {
+        out << "MyDir(" << dir.name << ", " << dir.size << ", (";
+        for (MyFile *file : dir.files) {
+            out << *file << ", ";
+        }
+        out << "))";
+        return out;
     }
 };
+
+int find_dir_size(MyDir *curDir) {
+    // add size of files in the directory
+    if (curDir->files.size() > 0) {
+        for (MyFile *file : curDir->files) {
+            curDir->size += file->size;
+        }
+    }
+    // recursively find size of subdirectories
+    if (curDir->files.size() > 0) {
+        for (MyDir *dir : curDir->dirs) {
+            curDir->size += find_dir_size(dir);
+        }
+    }
+    cout << "found size of directory: " << *curDir << endl;
+    return curDir->size;
+}
 
 int main() {
     string   line;
@@ -84,7 +107,9 @@ int main() {
             }
         } else {
             if (words[0] == "dir") {
-                cur_dir->add_dir(new MyDir(words[1]));
+                MyDir *new_dir = new MyDir(words[1]);
+                cur_dir->add_dir(new_dir);
+                cout << *cur_dir << " added child dir " << *new_dir << endl;
             } else {
                 int    size = stoi(words[0]);
                 string file_name = words[1];
@@ -101,20 +126,4 @@ int main() {
     }
 
     f.close();
-}
-
-int find_dir_size(MyDir *curDir) {
-    // add size of files first
-    if (curDir->files.size() != 0) {
-        for (auto file : curDir->files) {
-            curDir->size += file->size;
-        }
-    }
-    // recursively find size of subdirectories
-    if (curDir->files.size() != 0) {
-        for (auto dir : curDir->dirs) {
-            curDir->size += find_dir_size(dir);
-        }
-    }
-    return curDir->size;
 }
