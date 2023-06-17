@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.25.0)
 project(aoc VERSION 0.1.0 LANGUAGES C CXX)
-
-# include(CTest)
-# enable_testing()
 
 add_executable(day7 day7/main.cpp)
 
-# set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-# set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-# include(CPack)
+enable_testing()
+
+find_package(GTest CONFIG REQUIRED)
+target_link_libraries(day7 PRIVATE GTest::gtest GTest::gtest_main )
+
+add_test(AllTestsInMain main)
