@@ -40,29 +40,39 @@ class MyDir {
     void                 add_dir(MyDir *dir) { this->dirs.push_back(dir); }
     void                 add_file(MyFile *file) { this->files.push_back(file); }
     friend std::ostream &operator<<(std::ostream &out, const MyDir &dir) {
-        out << "MyDir(" << dir.name << ", " << dir.size << ", (";
+        string parent_name = "N/A";
+        if (dir.parent) {
+            parent_name = dir.parent->name;
+        }
+        out << "MyDir(" << dir.name << ", "
+            << "parent: " << parent_name << ", " << dir.size << ", (";
         for (MyFile *file : dir.files) {
             out << *file << ", ";
         }
-        out << "))";
+        out << "), ";
+        for (MyDir *subdir : dir.dirs) {
+            out << "MyDir(" << subdir->name << ", " << subdir->size << "), ";
+        }
+        out << ")";
         return out;
     }
 };
 
 int find_dir_size(MyDir *curDir) {
     // add size of files in the directory
+    int total_size = 0;
     if (curDir->files.size() > 0) {
         for (MyFile *file : curDir->files) {
-            curDir->size += file->size;
+            total_size += file->size;
         }
     }
     // recursively find size of subdirectories
     if (curDir->files.size() > 0) {
         for (MyDir *dir : curDir->dirs) {
-            curDir->size += find_dir_size(dir);
+            total_size += find_dir_size(dir);
         }
     }
-    cout << "found size of directory: " << *curDir << endl;
+    curDir->size = total_size;
     return curDir->size;
 }
 
@@ -96,9 +106,7 @@ int main() {
 
         // check what command was given
         if (words[0] == "$") {
-            if (words[1] == "ls") {
-                // pass
-            } else if (words[1] == "cd") {
+            if (words[1] == "cd") {
                 if (words[2] == "..") {
                     cur_dir = cur_dir->parent;
                 } else {
@@ -110,15 +118,24 @@ int main() {
                     // switch to specified directory
                     cur_dir = dirs[words[2]];
                 }
-            } else {
+            } else if (words[1] != "ls") {
                 throw exception("invalid command");
             }
         } else {
+            // handle results of ls command
             if (words[0] == "dir") {
-                MyDir *new_dir = new MyDir(words[1], cur_dir);
-                cur_dir->add_dir(new_dir);
-                cout << *cur_dir << " added child dir " << *new_dir << endl;
+                // this line is a subdirectory
+                MyDir *subdir = nullptr;
+                // create new directory if never seen before
+                if (dirs.find(words[1]) == dirs.end()) {
+                    subdir = new MyDir(words[1], cur_dir);
+                    dirs.insert(make_pair(words[1], subdir));
+                } else {
+                    subdir = dirs[words[1]];
+                }
+                cur_dir->add_dir(subdir);
             } else {
+                // this line is a file, with size first
                 int    size = stoi(words[0]);
                 string file_name = words[1];
                 cur_dir->add_file(new MyFile(file_name, size));
