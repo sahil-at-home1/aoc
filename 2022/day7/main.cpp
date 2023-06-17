@@ -146,9 +146,23 @@ int main() {
     // find size of all dirs, starting at root
     find_dir_size(dirs["/"]);
 
+    // print all dirs
     for (auto item : dirs) {
         cout << item.first << " : " << *(item.second) << endl;
     }
+
+    // Problem 1: find all dirs with size <= a big size and add their sizes
+    int       sumSizeOfSmallDirs = 0;
+    const int BIG_SIZE = 100000;
+    for (auto item : dirs) {
+        string dirName = item.first;
+        MyDir *dir = item.second;
+        if (dir->size <= BIG_SIZE) {
+            sumSizeOfSmallDirs += dir->size;
+        }
+    }
+
+    cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs;
 
     f.close();
 }
