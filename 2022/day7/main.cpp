@@ -29,9 +29,11 @@ class MyDir {
     vector<MyFile *> files;
     vector<MyDir *>  dirs;
     string           name;
+    MyDir           *parent;
 
   public:
-    MyDir(string name) {
+    MyDir(string name, MyDir *parent) {
+        this->parent = parent;
         this->name = name;
         this->size = 0;
     }
@@ -97,17 +99,23 @@ int main() {
             if (words[1] == "ls") {
                 // pass
             } else if (words[1] == "cd") {
-                // create new directory if never seen before
-                if (dirs.find(words[2]) == dirs.end()) {
-                    dirs.insert(make_pair(words[2], new MyDir(words[2])));
+                if (words[2] == "..") {
+                    cur_dir = cur_dir->parent;
+                } else {
+                    // create new directory if never seen before
+                    if (dirs.find(words[2]) == dirs.end()) {
+                        MyDir *new_dir = new MyDir(words[2], cur_dir);
+                        dirs.insert(make_pair(words[2], new_dir));
+                    }
+                    // switch to specified directory
+                    cur_dir = dirs[words[2]];
                 }
-                cur_dir = dirs[words[2]];
             } else {
                 throw exception("invalid command");
             }
         } else {
             if (words[0] == "dir") {
-                MyDir *new_dir = new MyDir(words[1]);
+                MyDir *new_dir = new MyDir(words[1], cur_dir);
                 cur_dir->add_dir(new_dir);
                 cout << *cur_dir << " added child dir " << *new_dir << endl;
             } else {
