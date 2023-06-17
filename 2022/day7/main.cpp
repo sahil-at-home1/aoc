@@ -34,14 +34,8 @@ class MyDir {
         this->name = name;
         this->size = 0;
     }
-    void add_file(MyFile *file) {
-        this->files.push_back(file);
-        this->size += file->size;
-    }
-    void add_dir(MyDir *dir) {
-        this->dirs.push_back(dir);
-        this->size += dir->size;
-    }
+    void                 add_dir(MyDir *dir) { this->dirs.push_back(dir); }
+    void                 add_file(MyFile *file) { this->files.push_back(file); }
     friend std::ostream &operator<<(std::ostream &os, const MyDir &dir) {
         return os << "(" << dir.name << ", " << dir.size << ")";
     }
@@ -99,6 +93,9 @@ int main() {
         }
     }
 
+    // find size of all dirs, starting at root
+    find_dir_size(dirs["/"]);
+
     for (auto item : dirs) {
         cout << item.first << " : " << *(item.second) << endl;
     }
@@ -106,4 +103,18 @@ int main() {
     f.close();
 }
 
-void handle_cd() {}
+int find_dir_size(MyDir *curDir) {
+    // add size of files first
+    if (curDir->files.size() != 0) {
+        for (auto file : curDir->files) {
+            curDir->size += file->size;
+        }
+    }
+    // recursively find size of subdirectories
+    if (curDir->files.size() != 0) {
+        for (auto dir : curDir->dirs) {
+            curDir->size += find_dir_size(dir);
+        }
+    }
+    return curDir->size;
+}
