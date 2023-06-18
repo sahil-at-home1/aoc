@@ -21,20 +21,49 @@ int find_dir_size(MyDir *curDir) {
     return curDir->size;
 }
 
-int get_sum_of_small_dirs(string input_file) {
+void handle_ls_dir(const string name, unordered_map<string, MyDir *> *dirs,
+                   MyDir *curDir) {
+    MyDir *subdir = nullptr;
+    // create new directory if never seen before
+    if (dirs->find(name) == dirs->end()) {
+        subdir = new MyDir(name, curDir);
+        dirs->insert(make_pair(name, subdir));
+    } else {
+        subdir = (*dirs)[name];
+    }
+    curDir->add_dir(subdir);
+}
+
+void handle_ls_file(const int size, const string name, MyDir *curDir) {
+    curDir->add_file(new MyFile(name, size));
+}
+
+void handle_cd(const string dir, unordered_map<string, MyDir *> *dirs,
+               MyDir *curDir) {
+    if (dir == "..") {
+        curDir = curDir->parent;
+    } else {
+        // create new directory if never seen before
+        if (dirs->find(dir) == dirs->end()) {
+            MyDir *new_dir = new MyDir(dir, curDir);
+            dirs->insert(make_pair(dir, new_dir));
+        }
+        // switch to specified directory
+        curDir = (*dirs)[dir];
+    }
+}
+
+void read_filesystem(string input_file, unordered_map<string, MyDir *> *dirs) {
     string   line;
     ifstream f;
 
     f.open(input_file);
-    // f.open("C:/Users/sahil/dev/aoc/2022/day7/input.txt");
-    // f.open("C:/Users/sahil/dev/aoc/2022/day7/ez_input.txt");
     if (!f.is_open()) {
         throw exception("could not open file");
     }
 
     // map of names to dirs
-    unordered_map<string, MyDir *> dirs;
-    MyDir                         *cur_dir = nullptr;
+    MyDir *curDir = nullptr;
 
     // read file line by line
     while (getline(f, line)) {
@@ -51,64 +80,41 @@ int get_sum_of_small_dirs(string input_file) {
 
         // check what command was given
         if (words[0] == "$") {
-            if (words[1] == "cd") {
-                if (words[2] == "..") {
-                    cur_dir = cur_dir->parent;
-                } else {
-                    // create new directory if never seen before
-                    if (dirs.find(words[2]) == dirs.end()) {
-                        MyDir *new_dir = new MyDir(words[2], cur_dir);
-                        dirs.insert(make_pair(words[2], new_dir));
-                    }
-                    // switch to specified directory
-                    cur_dir = dirs[words[2]];
-                }
-            } else if (words[1] != "ls") {
+            string cmd = words[1];
+            if (cmd == "cd") {
+                string dir = words[2];
+                handle_cd(dir, dirs, curDir);
+            } else if (cmd != "ls") {
                 throw exception("invalid command");
             }
         } else {
             // handle results of ls command
             if (words[0] == "dir") {
-                // this line is a subdirectory
-                MyDir *subdir = nullptr;
-                // create new directory if never seen before
-                if (dirs.find(words[1]) == dirs.end()) {
-                    subdir = new MyDir(words[1], cur_dir);
-                    dirs.insert(make_pair(words[1], subdir));
-                } else {
-                    subdir = dirs[words[1]];
-                }
-                cur_dir->add_dir(subdir);
+                handle_ls_dir(words[1], dirs, curDir);
             } else {
-                // this line is a file, with size first
-                int    size = stoi(words[0]);
-                string file_name = words[1];
-                cur_dir->add_file(new MyFile(file_name, size));
+                handle_ls_file(stoi(words[0]), words[1], curDir);
             }
         }
     }
-
-    // find size of all dirs, starting at root
-    find_dir_size(dirs["/"]);
-
+    f.close();
     // print all dirs
-    for (auto item : dirs) {
-        cout << item.first << " : " << *(item.second) << endl;
-    }
+    // for (auto item : dirs) {
+    //     cout << item.first << " : " << *(item.second) << endl;
+    // }
+    find_dir_size((*dirs)["/"]);
+}
 
-    // Problem 1: find all dirs with size <= a big size and add their sizes
+// Problem 1: find all dirs with size <= a big size and add their sizes
+int get_sum_of_small_dirs(unordered_map<string, MyDir *> *dirs) {
     int       sumSizeOfSmallDirs = 0;
     const int BIG_SIZE = 100000;
-    for (auto item : dirs) {
+    for (auto item : (*dirs)) {
         string dirName = item.first;
         MyDir *dir = item.second;
         if (dir->size <= BIG_SIZE) {
             sumSizeOfSmallDirs += dir->size;
         }
     }
-
     cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs;
-
-    f.close();
     return 0;
 }
