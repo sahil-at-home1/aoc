@@ -21,8 +21,7 @@ int find_dir_size(MyDir *curDir) {
     return curDir->size;
 }
 
-void handle_ls_dir(const string name, unordered_map<string, MyDir *> *dirs,
-                   MyDir *curDir) {
+void handle_ls_dir(const string name, DirMap *dirs, MyDir *curDir) {
     MyDir *subdir = nullptr;
     // create new directory if never seen before
     if (dirs->find(name) == dirs->end()) {
@@ -38,8 +37,7 @@ void handle_ls_file(const int size, const string name, MyDir *curDir) {
     curDir->add_file(new MyFile(name, size));
 }
 
-void handle_cd(const string dir, unordered_map<string, MyDir *> *dirs,
-               MyDir *curDir) {
+void handle_cd(const string dir, DirMap *dirs, MyDir *curDir) {
     if (dir == "..") {
         curDir = curDir->parent;
     } else {
@@ -53,7 +51,7 @@ void handle_cd(const string dir, unordered_map<string, MyDir *> *dirs,
     }
 }
 
-void read_filesystem(string input_file, unordered_map<string, MyDir *> *dirs) {
+void read_filesystem(const string input_file, DirMap *dirs) {
     string   line;
     ifstream f;
 
@@ -105,7 +103,7 @@ void read_filesystem(string input_file, unordered_map<string, MyDir *> *dirs) {
 }
 
 // Problem 1: find all dirs with size <= a big size and add their sizes
-int get_sum_of_small_dirs(unordered_map<string, MyDir *> *dirs) {
+int get_sum_of_small_dirs(DirMap *dirs) {
     int       sumSizeOfSmallDirs = 0;
     const int BIG_SIZE = 100000;
     for (auto item : (*dirs)) {
