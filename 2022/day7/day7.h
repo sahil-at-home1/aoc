@@ -56,4 +56,4 @@ class MyDir {
     }
 };
 
-int find_dir_size(MyDir *dir);
+int get_sum_of_small_dirs(std::string input_file);

@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:\\vcpkg\\packages\\gtest_x86-windows\\include\\gtest"
+                "C:/vcpkg/installed/x86-windows/include",
+                "C:/vcpkg/packages/gtest_x86-windows/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -13,8 +14,8 @@
             ],
             "windowsSdkVersion": "10.0.22000.0",
             "compilerPath": "cl.exe",
-            "intelliSenseMode": "windows-msvc-x64",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "intelliSenseMode": "windows-msvc-x86"
+            // "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4
