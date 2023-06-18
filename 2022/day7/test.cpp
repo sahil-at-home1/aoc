@@ -4,7 +4,7 @@
 using namespace std;
 
 TEST(Day7Test, TestEZInput) {
-    string testFile = "ez_input.txt";
+    string testFile = "c:/users/sahil/dev/aoc/2022/day7/ez_input.txt";
     int    sumOfSmallDirs = get_sum_of_small_dirs(testFile);
     ASSERT_EQ(sumOfSmallDirs, 95437);
 }
