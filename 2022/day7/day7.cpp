@@ -1,9 +1,14 @@
 #include "day7.h"
+#include <stdexcept>
 #include <string.h>
 
 using namespace std;
 
 int find_dir_size(MyDir *curDir) {
+    if (curDir == nullptr) {
+        cout << "current directory is null" << endl;
+        throw exception();
+    }
     // add size of files in the directory
     int total_size = 0;
     if (curDir->files.size() > 0) {
@@ -22,6 +27,10 @@ int find_dir_size(MyDir *curDir) {
 }
 
 void handle_ls_dir(const string name, DirMap *dirs, MyDir *curDir) {
+    if (curDir == nullptr) {
+        cout << "current directory is null" << endl;
+        throw exception();
+    }
     MyDir *subdir = nullptr;
     // create new directory if never seen before
     if (dirs->find(name) == dirs->end()) {
@@ -34,12 +43,25 @@ void handle_ls_dir(const string name, DirMap *dirs, MyDir *curDir) {
 }
 
 void handle_ls_file(const int size, const string name, MyDir *curDir) {
+    if (curDir == nullptr) {
+        cout << "current directory is null" << endl;
+        throw exception();
+    }
     curDir->add_file(new MyFile(name, size));
 }
 
 void handle_cd(const string dir, DirMap *dirs, MyDir *curDir) {
+    if (curDir == nullptr) {
+        cout << "current directory is null" << endl;
+        throw exception();
+    }
     if (dir == "..") {
+        if (curDir->parent == nullptr) {
+            cout << "current directory parent is null" << endl;
+            throw exception();
+        }
         curDir = curDir->parent;
+
     } else {
         // create new directory if never seen before
         if (dirs->find(dir) == dirs->end()) {
@@ -49,19 +71,26 @@ void handle_cd(const string dir, DirMap *dirs, MyDir *curDir) {
         // switch to specified directory
         curDir = (*dirs)[dir];
     }
+    if (curDir == nullptr) {
+        cout << "current directory is null" << endl;
+        throw exception();
+    }
 }
 
+// generates all directory objects, but does NOT calculate their sizes
 void gen_dir_map(const string input_file, DirMap *dirs) {
     string   line;
     ifstream f;
 
     f.open(input_file);
     if (!f.is_open()) {
-        throw exception("could not open file");
+        cout << "could not open file" << endl;
+        throw exception();
     }
 
-    // map of names to dirs
-    MyDir *curDir = nullptr;
+    // always start with the root dir?
+    (*dirs)["/"] = new MyDir("/", nullptr);
+    MyDir *curDir = (*dirs)["/"];
 
     // read file line by line
     while (getline(f, line)) {
@@ -83,7 +112,8 @@ void gen_dir_map(const string input_file, DirMap *dirs) {
                 string dir = words[2];
                 handle_cd(dir, dirs, curDir);
             } else if (cmd != "ls") {
-                throw exception("invalid command");
+                cout << "invalid command" << endl;
+                throw exception();
             }
         } else {
             // handle results of ls command
