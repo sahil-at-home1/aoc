@@ -56,11 +56,12 @@ class MyDir {
     }
 };
 
-using DirMap = unordered_map<string, MyDir *>;
+using DirMap = std::unordered_map<std::string, MyDir *>;
 
 int  find_dir_size(MyDir *curDir);
-int  handle_ls_dir(const string name, DirMap dirs, MyDir *curDir);
-int  handle_ls_file(const int size, const string name, MyDir *curDir);
-int  handle_cd_dir(const string dir, DirMap dirs, MyDir *curDir);
-void read_filesystem(const string input_file, DirMap *dirs);
-int  get_sum_of_small_dirs(DirMap);
+int  handle_ls_dir(const std::string name, DirMap dirs, MyDir *curDir);
+void handle_ls_file(const int size, const std::string name, MyDir *curDir);
+int  handle_cd_dir(const std::string dir, DirMap dirs, MyDir *curDir);
+void read_filesystem(const std::string inputFile, DirMap *dirs);
+void gen_dir_map(const std::string inputFile, DirMap *dirs);
+int  get_sum_of_small_dirs(DirMap *dirs);

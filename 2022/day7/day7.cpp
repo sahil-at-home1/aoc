@@ -51,7 +51,7 @@ void handle_cd(const string dir, DirMap *dirs, MyDir *curDir) {
     }
 }
 
-void read_filesystem(const string input_file, DirMap *dirs) {
+void gen_dir_map(const string input_file, DirMap *dirs) {
     string   line;
     ifstream f;
 
@@ -95,10 +95,10 @@ void read_filesystem(const string input_file, DirMap *dirs) {
         }
     }
     f.close();
-    // print all dirs
-    // for (auto item : dirs) {
-    //     cout << item.first << " : " << *(item.second) << endl;
-    // }
+}
+
+void read_filesystem(const string inputFile, DirMap *dirs) {
+    gen_dir_map(inputFile, dirs);
     find_dir_size((*dirs)["/"]);
 }
 
