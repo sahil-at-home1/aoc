@@ -1,13 +1,22 @@
 #include "day7.h"
+#include <iostream>
 #include <stdexcept>
+#include <stdio.h>
 #include <string.h>
 
-using namespace std;
+MyFile::MyFile(std::string name, int size) {
+    this->name = name;
+    this->size = size;
+}
+std::ostream &operator<<(std::ostream &out, const MyFile &file) {
+    out << "MyFile(" << file.name << ", " << file.size << ")";
+    return out;
+}
 
 int find_dir_size(MyDir *curDir) {
     if (curDir == nullptr) {
-        cout << "current directory is null" << endl;
-        throw exception();
+        std::cout << "current directory is null" << std::endl;
+        throw std::exception();
     }
     // add size of files in the directory
     int total_size = 0;
@@ -26,10 +35,10 @@ int find_dir_size(MyDir *curDir) {
     return curDir->size;
 }
 
-void handle_ls_dir(const string name, DirMap *dirs, MyDir *curDir) {
+void handle_ls_dir(const std::string name, DirMap *dirs, MyDir *curDir) {
     if (curDir == nullptr) {
-        cout << "current directory is null" << endl;
-        throw exception();
+        std::cout << "current directory is null" << std::endl;
+        throw std::exception();
     }
     MyDir *subdir = nullptr;
     // create new directory if never seen before
@@ -42,23 +51,24 @@ void handle_ls_dir(const string name, DirMap *dirs, MyDir *curDir) {
     curDir->add_dir(subdir);
 }
 
-void handle_ls_file(const int size, const string name, MyDir *curDir) {
+void handle_ls_file(const int size, const std::string name, MyDir *curDir) {
     if (curDir == nullptr) {
-        cout << "current directory is null" << endl;
-        throw exception();
+        std::cout << "current directory is null" << std::endl;
+        throw std::exception();
     }
     curDir->add_file(new MyFile(name, size));
 }
 
-void handle_cd(const string dir, DirMap *dirs, MyDir *curDir) {
+void handle_cd(const std::string dir, DirMap *dirs, MyDir *curDir) {
     if (curDir == nullptr) {
-        cout << "current directory is null" << endl;
-        throw exception();
+        std::cout << "current directory is null" << std::endl;
+        throw std::exception();
     }
     if (dir == "..") {
         if (curDir->parent == nullptr) {
-            cout << "current directory parent is null" << endl;
-            throw exception();
+            std::cout << "current directory " << *curDir << " parent is null"
+                      << std::endl;
+            throw std::exception();
         }
         curDir = curDir->parent;
 
@@ -66,26 +76,27 @@ void handle_cd(const string dir, DirMap *dirs, MyDir *curDir) {
         // create new directory if never seen before
         if (dirs->find(dir) == dirs->end()) {
             MyDir *new_dir = new MyDir(dir, curDir);
+            curDir->add_dir(new_dir);
             dirs->insert(make_pair(dir, new_dir));
         }
         // switch to specified directory
         curDir = (*dirs)[dir];
     }
     if (curDir == nullptr) {
-        cout << "current directory is null" << endl;
-        throw exception();
+        std::cout << "current directory is null" << std::endl;
+        throw std::exception();
     }
 }
 
 // generates all directory objects, but does NOT calculate their sizes
-void gen_dir_map(const string input_file, DirMap *dirs) {
-    string   line;
-    ifstream f;
+void gen_dir_map(const std::string input_file, DirMap *dirs) {
+    std::string   line;
+    std::ifstream f;
 
     f.open(input_file);
     if (!f.is_open()) {
-        cout << "could not open file" << endl;
-        throw exception();
+        std::cout << "could not open file" << std::endl;
+        throw std::exception();
     }
 
     // always start with the root dir?
@@ -94,11 +105,13 @@ void gen_dir_map(const string input_file, DirMap *dirs) {
 
     // read file line by line
     while (getline(f, line)) {
+        std::cout << "Handling line: " << line
+                  << "\n    Current Directory: " << *curDir << std::endl;
         // split line by spaces
-        const string   delim = " ";
-        vector<string> words;
-        size_t         end = line.find(delim);
-        while (end != string::npos) {
+        const std::string        delim = " ";
+        std::vector<std::string> words;
+        size_t                   end = line.find(delim);
+        while (end != std::string::npos) {
             words.push_back(line.substr(0, end));
             line = line.substr(end + delim.length(), line.length());
             end = line.find(delim);
@@ -107,13 +120,13 @@ void gen_dir_map(const string input_file, DirMap *dirs) {
 
         // check what command was given
         if (words[0] == "$") {
-            string cmd = words[1];
+            std::string cmd = words[1];
             if (cmd == "cd") {
-                string dir = words[2];
+                std::string dir = words[2];
                 handle_cd(dir, dirs, curDir);
             } else if (cmd != "ls") {
-                cout << "invalid command" << endl;
-                throw exception();
+                std::cout << "invalid command" << std::endl;
+                throw std::exception();
             }
         } else {
             // handle results of ls command
@@ -127,7 +140,7 @@ void gen_dir_map(const string input_file, DirMap *dirs) {
     f.close();
 }
 
-void read_filesystem(const string inputFile, DirMap *dirs) {
+void read_filesystem(const std::string inputFile, DirMap *dirs) {
     gen_dir_map(inputFile, dirs);
     find_dir_size((*dirs)["/"]);
 }
@@ -137,12 +150,12 @@ int get_sum_of_small_dirs(DirMap *dirs) {
     int       sumSizeOfSmallDirs = 0;
     const int BIG_SIZE = 100000;
     for (auto item : (*dirs)) {
-        string dirName = item.first;
-        MyDir *dir = item.second;
+        std::string dirName = item.first;
+        MyDir      *dir = item.second;
         if (dir->size <= BIG_SIZE) {
             sumSizeOfSmallDirs += dir->size;
         }
     }
-    cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs;
+    std::cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs;
     return 0;
 }

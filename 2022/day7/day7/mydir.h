@@ -1,25 +1,8 @@
-#include <fstream>
+#include "myfile.h"
 #include <iostream>
-#include <stdexcept>
+#include <stdio.h>
 #include <string>
-#include <unordered_map>
 #include <vector>
-
-class MyFile {
-  public:
-    int         size;
-    std::string name;
-
-  public:
-    MyFile(std::string name, int size) {
-        this->name = name;
-        this->size = size;
-    }
-    friend std::ostream &operator<<(std::ostream &out, const MyFile &file) {
-        out << "MyFile(" << file.name << ", " << file.size << ")";
-        return out;
-    }
-};
 
 class MyDir {
   public:
@@ -55,13 +38,3 @@ class MyDir {
         return out;
     }
 };
-
-using DirMap = std::unordered_map<std::string, MyDir *>;
-
-int find_dir_size(MyDir *curDir);
-// int  handle_ls_dir(const std::string name, DirMap dirs, MyDir *curDir);
-// void handle_ls_file(const int size, const std::string name, MyDir *curDir);
-// int  handle_cd_dir(const std::string dir, DirMap dirs, MyDir *curDir);
-void read_filesystem(const std::string inputFile, DirMap *dirs);
-void gen_dir_map(const std::string inputFile, DirMap *dirs);
-int  get_sum_of_small_dirs(DirMap *dirs);
