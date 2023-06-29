@@ -1,4 +1,4 @@
-#include "day7.h"
+#include "day7/day7.h"
 #include "gtest/gtest.h"
 
 using namespace std;
@@ -12,9 +12,9 @@ TEST(Day7Test, FindDirSizes) {
     // {"a", 94853},
     // {"d", 24933642},
     // {"e", 584}};
-    DirMap *dirs = new DirMap();
+    day7::DirMap *dirs = new day7::DirMap();
 
-    gen_dir_map(testFile, dirs);
+    day7::gen_dir_map(testFile, dirs);
 
     for (auto &item : *dirs) {
         MyDir *dir = item.second;
@@ -25,8 +25,8 @@ TEST(Day7Test, FindDirSizes) {
 }
 
 TEST(Day7Test, GetSumOfSmallDirs) {
-    DirMap *dirs = new DirMap();
-    read_filesystem(testFile, dirs);
-    int sumOfSmallDirs = get_sum_of_small_dirs(dirs);
+    day7::DirMap *dirs = new day7::DirMap();
+    day7::read_filesystem(testFile, dirs);
+    int sumOfSmallDirs = day7::get_sum_of_small_dirs(dirs);
     ASSERT_EQ(sumOfSmallDirs, 95437);
 }

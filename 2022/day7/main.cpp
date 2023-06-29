@@ -1,14 +1,12 @@
-#include "day7.h"
-
-using namespace std;
+#include "day7/day7.h"
 
 int main() {
     // string  inputFile = "C:/users/sahil/dev/aoc/2022/day7/input.txt";
-    string  inputFile = "C:/users/sahil/dev/aoc/2022/day7/ez_input.txt";
-    DirMap *dirs = new DirMap();
+    std::string   inputFile = "C:/users/sahil/dev/aoc/2022/day7/ez_input.txt";
+    day7::DirMap *dirs = new day7::DirMap();
 
-    read_filesystem(inputFile, dirs);
-    get_sum_of_small_dirs(dirs);
+    day7::read_filesystem(inputFile, dirs);
+    day7::get_sum_of_small_dirs(dirs);
 
-    cout << "(Problem 1) The answer to the real input is: " << endl;
+    std::cout << "(Problem 1) The answer to the real input is: " << std::endl;
 }

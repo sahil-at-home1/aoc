@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-namespace day7 {
+using namespace day7;
+
 int find_dir_size(MyDir *curDir) {
     if (curDir == nullptr) {
         std::cout << "current directory is null" << std::endl;
@@ -152,4 +153,3 @@ int get_sum_of_small_dirs(DirMap *dirs) {
     std::cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs;
     return 0;
 }
-} // namespace day7
