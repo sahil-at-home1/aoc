@@ -60,8 +60,8 @@ void handle_cd(const std::string dir, DirMap *dirs, MyDir *curDir) {
     }
     if (dir == "..") {
         if (curDir->parent == nullptr) {
-            std::cout << "current directory " << *curDir << " parent is null"
-                      << std::endl;
+            std::cout << "the current directory, " << curDir->name
+                      << ", has null parent" << std::endl;
             throw std::exception();
         }
         curDir = curDir->parent;
@@ -100,7 +100,7 @@ void day7::gen_dir_map(const std::string input_file, DirMap *dirs) {
     // read file line by line
     while (getline(f, line)) {
         std::cout << "Handling line: " << line << std::endl;
-        std::cout << "Current Directory: " << std::endl;
+        std::cout << "Current Directory: " << curDir->name << std::endl;
         std::cout << *curDir << std::endl;
         // split line by spaces
         const std::string        delim = " ";
