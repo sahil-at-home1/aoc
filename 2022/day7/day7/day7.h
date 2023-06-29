@@ -1,3 +1,4 @@
+#pragma once
 #include "mydir.h"
 #include "myfile.h"
 #include <unordered_map>

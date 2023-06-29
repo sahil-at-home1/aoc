@@ -1,18 +1,11 @@
 #include "day7.h"
+#include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
 #include <string.h>
 
-MyFile::MyFile(std::string name, int size) {
-    this->name = name;
-    this->size = size;
-}
-std::ostream &operator<<(std::ostream &out, const MyFile &file) {
-    out << "MyFile(" << file.name << ", " << file.size << ")";
-    return out;
-}
-
+namespace day7 {
 int find_dir_size(MyDir *curDir) {
     if (curDir == nullptr) {
         std::cout << "current directory is null" << std::endl;
@@ -28,7 +21,7 @@ int find_dir_size(MyDir *curDir) {
     // recursively find size of subdirectories
     if (curDir->files.size() > 0) {
         for (MyDir *dir : curDir->dirs) {
-            total_size += find_dir_size(dir);
+            total_size += day7::find_dir_size(dir);
         }
     }
     curDir->size = total_size;
@@ -141,8 +134,8 @@ void gen_dir_map(const std::string input_file, DirMap *dirs) {
 }
 
 void read_filesystem(const std::string inputFile, DirMap *dirs) {
-    gen_dir_map(inputFile, dirs);
-    find_dir_size((*dirs)["/"]);
+    day7::gen_dir_map(inputFile, dirs);
+    day7::find_dir_size((*dirs)["/"]);
 }
 
 // Problem 1: find all dirs with size <= a big size and add their sizes
@@ -159,3 +152,4 @@ int get_sum_of_small_dirs(DirMap *dirs) {
     std::cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs;
     return 0;
 }
+} // namespace day7
