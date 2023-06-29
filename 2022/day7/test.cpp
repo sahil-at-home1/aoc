@@ -1,4 +1,4 @@
-#include "day7/day7.h"
+#include "day7.h"
 #include "gtest/gtest.h"
 
 using namespace std;

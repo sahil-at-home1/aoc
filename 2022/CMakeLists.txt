@@ -4,14 +4,23 @@ set(CMAKE_PREFIX_PATH "C:/vcpkg/installed/x86-windows/")
 
 find_package(GTest CONFIG REQUIRED)
 
-add_library(day7 day7/day7.cpp)
+add_library(Day7Lib 
+    day7/day7/src/mydir.cpp 
+    day7/day7/src/myfile.cpp 
+    day7/day7/src/day7.cpp
+    )
+
 add_executable(Day7Main day7/main.cpp)
 add_executable(Day7Test day7/test.cpp)
 
+target_include_directories(Day7Lib PUBLIC day7/day7/include)
+target_include_directories(Day7Main PUBLIC day7/day7/include)
+target_include_directories(Day7Test PUBLIC day7/day7/include)
+
 enable_testing()
 
-target_link_libraries(Day7Test PRIVATE GTest::gtest GTest::gtest_main day7)
-target_link_libraries(Day7Main PRIVATE day7)
+target_link_libraries(Day7Test PRIVATE GTest::gtest GTest::gtest_main Day7Lib)
+target_link_libraries(Day7Main PRIVATE Day7Lib)
 
 include(GoogleTest)
 gtest_discover_tests(Day7Test)

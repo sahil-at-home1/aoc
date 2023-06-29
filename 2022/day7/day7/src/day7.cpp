@@ -7,7 +7,7 @@
 
 using namespace day7;
 
-int find_dir_size(MyDir *curDir) {
+int day7::find_dir_size(MyDir *curDir) {
     if (curDir == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
@@ -22,7 +22,7 @@ int find_dir_size(MyDir *curDir) {
     // recursively find size of subdirectories
     if (curDir->files.size() > 0) {
         for (MyDir *dir : curDir->dirs) {
-            total_size += day7::find_dir_size(dir);
+            total_size += find_dir_size(dir);
         }
     }
     curDir->size = total_size;
@@ -83,7 +83,7 @@ void handle_cd(const std::string dir, DirMap *dirs, MyDir *curDir) {
 }
 
 // generates all directory objects, but does NOT calculate their sizes
-void gen_dir_map(const std::string input_file, DirMap *dirs) {
+void day7::gen_dir_map(const std::string input_file, DirMap *dirs) {
     std::string   line;
     std::ifstream f;
 
@@ -134,13 +134,13 @@ void gen_dir_map(const std::string input_file, DirMap *dirs) {
     f.close();
 }
 
-void read_filesystem(const std::string inputFile, DirMap *dirs) {
-    day7::gen_dir_map(inputFile, dirs);
-    day7::find_dir_size((*dirs)["/"]);
+void day7::read_filesystem(const std::string inputFile, DirMap *dirs) {
+    gen_dir_map(inputFile, dirs);
+    find_dir_size((*dirs)["/"]);
 }
 
 // Problem 1: find all dirs with size <= a big size and add their sizes
-int get_sum_of_small_dirs(DirMap *dirs) {
+int day7::get_sum_of_small_dirs(DirMap *dirs) {
     int       sumSizeOfSmallDirs = 0;
     const int BIG_SIZE = 100000;
     for (auto item : (*dirs)) {

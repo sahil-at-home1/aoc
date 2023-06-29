@@ -1,4 +1,4 @@
-#include "day7/day7.h"
+#include "day7.h"
 
 int main() {
     // string  inputFile = "C:/users/sahil/dev/aoc/2022/day7/input.txt";
