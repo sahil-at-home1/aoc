@@ -8,6 +8,8 @@ MyFile::MyFile(std::string name, int size) {
 }
 
 std::ostream &operator<<(std::ostream &out, const MyFile &file) {
-    out << "MyFile( " << file.name << ")" << std::endl;
+    out << "MyFile(";
+    out << file.name << ", ";
+    out << file.size << ")" << std::endl;
     return out;
 }

@@ -99,8 +99,9 @@ void day7::gen_dir_map(const std::string input_file, DirMap *dirs) {
 
     // read file line by line
     while (getline(f, line)) {
-        std::cout << "Handling line: " << line
-                  << "\n    Current Directory: " << *curDir << std::endl;
+        std::cout << "Handling line: " << line << std::endl;
+        std::cout << "Current Directory: " << std::endl;
+        std::cout << *curDir << std::endl;
         // split line by spaces
         const std::string        delim = " ";
         std::vector<std::string> words;

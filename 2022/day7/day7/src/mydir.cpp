@@ -15,9 +15,8 @@ std::ostream &operator<<(std::ostream &out, const MyDir &dir) {
     out << "MyDir(" << dir.name << ", "
         << "parent: " << parent_name << ", " << dir.size << ", (";
     for (MyFile *file : dir.files) {
-        out << " - " << *file << std::endl;
+        out << " - " << *file;
     }
-    out << "), ";
     for (MyDir *subdir : dir.dirs) {
         out << " - MyDir(" << subdir->name << ", " << subdir->size << ")"
             << std::endl;
