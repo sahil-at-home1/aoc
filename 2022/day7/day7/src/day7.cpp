@@ -29,54 +29,56 @@ int day7::find_dir_size(MyDir *curDir) {
     return curDir->size;
 }
 
-void handle_ls_dir(const std::string name, DirMap *dirs, MyDir *curDir) {
-    if (curDir == nullptr) {
+void handle_ls_dir(const std::string name, DirMap *dirs, MyDir **curDir) {
+    if ((*curDir) == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
     }
     MyDir *subdir = nullptr;
     // create new directory if never seen before
     if (dirs->find(name) == dirs->end()) {
-        subdir = new MyDir(name, curDir);
+        subdir = new MyDir(name, (*curDir));
         dirs->insert(make_pair(name, subdir));
     } else {
         subdir = (*dirs)[name];
     }
-    curDir->add_dir(subdir);
+    (*curDir)->add_dir(subdir);
 }
 
-void handle_ls_file(const int size, const std::string name, MyDir *curDir) {
-    if (curDir == nullptr) {
+void handle_ls_file(const int size, const std::string name, MyDir **curDir) {
+    if ((*curDir) == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
     }
-    curDir->add_file(new MyFile(name, size));
+    (*curDir)->add_file(new MyFile(name, size));
 }
 
-void handle_cd(const std::string dir, DirMap *dirs, MyDir *curDir) {
-    if (curDir == nullptr) {
+void handle_cd(const std::string dir, DirMap *dirs, MyDir **curDir) {
+    if ((*curDir) == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
     }
     if (dir == "..") {
-        if (curDir->parent == nullptr) {
-            std::cout << "the current directory, " << curDir->name
+        if ((*curDir)->parent == nullptr) {
+            std::cout << "the current directory, " << (*curDir)->name
                       << ", has null parent" << std::endl;
             throw std::exception();
         }
-        curDir = curDir->parent;
+        (*curDir) = (*curDir)->parent;
 
     } else {
         // create new directory if never seen before
         if (dirs->find(dir) == dirs->end()) {
-            MyDir *new_dir = new MyDir(dir, curDir);
-            curDir->add_dir(new_dir);
+            MyDir *new_dir = new MyDir(dir, (*curDir));
+            (*curDir)->add_dir(new_dir);
             dirs->insert(make_pair(dir, new_dir));
         }
         // switch to specified directory
-        curDir = (*dirs)[dir];
+        std::cout << "switching to directory " << dir << ", and found "
+                  << (*dirs)[dir]->name << std::endl;
+        (*curDir) = (*dirs)[dir];
     }
-    if (curDir == nullptr) {
+    if ((*curDir) == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
     }
@@ -95,12 +97,14 @@ void day7::gen_dir_map(const std::string input_file, DirMap *dirs) {
 
     // always start with the root dir?
     (*dirs)["/"] = new MyDir("/", nullptr);
-    MyDir *curDir = (*dirs)["/"];
+    // pointer to mem that holds pointer to cur dir
+    MyDir **curDir = new MyDir *;
+    *curDir = (*dirs)["/"];
 
     // read file line by line
     while (getline(f, line)) {
         std::cout << "Handling line: " << line << std::endl;
-        std::cout << "Current Directory: " << curDir->name << std::endl;
+        std::cout << "Current Directory: " << (*curDir)->name << std::endl;
         std::cout << *curDir << std::endl;
         // split line by spaces
         const std::string        delim = " ";
@@ -119,6 +123,8 @@ void day7::gen_dir_map(const std::string input_file, DirMap *dirs) {
             if (cmd == "cd") {
                 std::string dir = words[2];
                 handle_cd(dir, dirs, curDir);
+                std::cout << "current directory is " << (*curDir)->name
+                          << std::endl;
             } else if (cmd != "ls") {
                 std::cout << "invalid command" << std::endl;
                 throw std::exception();
