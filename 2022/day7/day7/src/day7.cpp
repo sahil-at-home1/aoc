@@ -157,6 +157,7 @@ int day7::get_sum_of_small_dirs(DirMap *dirs) {
             sumSizeOfSmallDirs += dir->size;
         }
     }
-    std::cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs;
+    std::cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs
+              << std::endl;
     return 0;
 }
