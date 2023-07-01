@@ -74,8 +74,8 @@ void handle_cd(const std::string dir, DirMap *dirs, MyDir **curDir) {
             dirs->insert(make_pair(dir, new_dir));
         }
         // switch to specified directory
-        std::cout << "switching to directory " << dir << ", and found "
-                  << (*dirs)[dir]->name << std::endl;
+        // std::cout << "switching to directory " << dir << ", and found "
+        //           << (*dirs)[dir]->name << std::endl;
         (*curDir) = (*dirs)[dir];
     }
     if ((*curDir) == nullptr) {
@@ -103,9 +103,9 @@ void day7::gen_dir_map(const std::string input_file, DirMap *dirs) {
 
     // read file line by line
     while (getline(f, line)) {
-        std::cout << "Handling line: " << line << std::endl;
-        std::cout << "Current Directory: " << (*curDir)->name << std::endl;
-        std::cout << *curDir << std::endl;
+        // std::cout << "Handling line: " << line << std::endl;
+        // std::cout << "Current Directory: " << (*curDir)->name << std::endl;
+        // std::cout << *curDir << std::endl;
         // split line by spaces
         const std::string        delim = " ";
         std::vector<std::string> words;
@@ -123,8 +123,8 @@ void day7::gen_dir_map(const std::string input_file, DirMap *dirs) {
             if (cmd == "cd") {
                 std::string dir = words[2];
                 handle_cd(dir, dirs, curDir);
-                std::cout << "current directory is " << (*curDir)->name
-                          << std::endl;
+                // std::cout << "current directory is " << (*curDir)->name
+                //           << std::endl;
             } else if (cmd != "ls") {
                 std::cout << "invalid command" << std::endl;
                 throw std::exception();
@@ -157,7 +157,7 @@ int day7::get_sum_of_small_dirs(DirMap *dirs) {
             sumSizeOfSmallDirs += dir->size;
         }
     }
-    std::cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs
-              << std::endl;
-    return 0;
+    // std::cout << "sum of small dir sizes is: " << sumSizeOfSmallDirs
+    //           << std::endl;
+    return sumSizeOfSmallDirs;
 }
