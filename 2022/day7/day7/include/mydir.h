@@ -10,7 +10,7 @@ class MyDir {
     int                   size;
     std::vector<MyFile *> files;
     std::vector<MyDir *>  dirs;
-    std::string           name;
+    std::string           path;
     MyDir                *parent;
 
   public:

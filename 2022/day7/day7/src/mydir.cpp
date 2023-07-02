@@ -3,22 +3,28 @@
 
 MyDir::MyDir(std::string name, MyDir *parent) {
     this->parent = parent;
-    this->name = name;
-    this->size = 0;
+    if (parent == nullptr) {
+        this->path = name;
+    } else if (parent->path == "/") {
+        this->path = parent->path + name;
+    } else {
+        this->path = parent->path + "/" + name;
+        this->size = 0;
+    }
 }
 
 std::ostream &operator<<(std::ostream &out, const MyDir &dir) {
-    std::string parent_name = "N/A";
+    std::string parentPath = "N/A";
     if (dir.parent) {
-        parent_name = dir.parent->name;
+        parentPath = dir.parent->path;
     }
-    out << "MyDir(" << dir.name << ", "
-        << "parent: " << parent_name << ", " << dir.size << ", (" << std::endl;
+    out << "MyDir(" << dir.path << ", "
+        << "parent: " << parentPath << ", " << dir.size << ", (" << std::endl;
     for (MyFile *file : dir.files) {
         out << " - " << *file;
     }
     for (MyDir *subdir : dir.dirs) {
-        out << " - MyDir(" << subdir->name << ", " << subdir->size << ")"
+        out << " - MyDir(" << subdir->path << ", " << subdir->size << ")"
             << std::endl;
     }
     out << " )" << std::endl;
