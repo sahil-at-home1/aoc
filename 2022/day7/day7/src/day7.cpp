@@ -7,26 +7,26 @@
 
 using namespace day7;
 
-int day7::find_dir_size(MyDir *curDir) {
-    if (curDir == nullptr) {
+int day7::find_dir_size(MyDir **curDir) {
+    if ((*curDir) == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
     }
     // add size of files in the directory
     int total_size = 0;
-    if (curDir->files.size() > 0) {
-        for (MyFile *file : curDir->files) {
+    if ((*curDir)->files.size() > 0) {
+        for (MyFile *file : (*curDir)->files) {
             total_size += file->size;
         }
     }
     // recursively find size of subdirectories
-    if (curDir->files.size() > 0) {
-        for (auto item : curDir->get_child_dirs()) {
-            total_size += find_dir_size(item.second);
+    if ((*curDir)->files.size() > 0) {
+        for (auto item : (*curDir)->get_child_dirs()) {
+            total_size += find_dir_size(&item.second);
         }
     }
-    curDir->size = total_size;
-    return curDir->size;
+    (*curDir)->size = total_size;
+    return (*curDir)->size;
 }
 
 void handle_ls_dir(const std::string name, MyDir **curDir) {
@@ -39,7 +39,7 @@ void handle_ls_dir(const std::string name, MyDir **curDir) {
     if ((*curDir)->get_child_dir(name) == nullptr) {
         newDir = new MyDir(name, (*curDir));
         (*curDir)->add_child_dir(newDir);
-        std::cout << "NEW DIRECTORY " << newDir->path << std::endl;
+        // std::cout << "NEW DIRECTORY " << newDir->path << std::endl;
     }
 }
 
@@ -56,23 +56,27 @@ void handle_cd(const std::string destDir, MyDir **curDir) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
     }
+
+    // std::cout << "CURRENT DIRECTORY: " << **curDir << std::endl;
+
     if (destDir == "..") {
         if ((*curDir)->parent == nullptr) {
-            std::cout << "the current directory, " << (*curDir)->path
-                      << ", has null parent" << std::endl;
+            std::cout << "the current directory, \"" << (*curDir)->path
+                      << "\", has null parent" << std::endl;
             throw std::exception();
         }
         (*curDir) = (*curDir)->parent;
 
     } else {
-        // create new directory if never seen before
+        // check if dir in cur dir children
         if ((*curDir)->name != destDir && !(*curDir)->get_child_dir(destDir)) {
-            MyDir *newDir = new MyDir(destDir, (*curDir));
-            (*curDir)->add_child_dir(newDir);
-            std::cout << "NEW DIRECTORY " << newDir->path << std::endl;
+            std::cout << "the destination dir, " << destDir
+                      << " not in current dir " << **curDir << " children"
+                      << std::endl;
+            throw std::exception();
         }
         // switch to specified dir from current dir children
-        if ((*curDir)->name != "/" && destDir != "/") {
+        if (destDir != "/") {
             (*curDir) = (*curDir)->get_child_dir(destDir);
         }
     }
@@ -138,7 +142,7 @@ MyDir *day7::gen_dirs(const std::string input_file) {
 
 MyDir *day7::read_filesystem(const std::string inputFile) {
     MyDir *rootDir = gen_dirs(inputFile);
-    find_dir_size(rootDir);
+    find_dir_size(&rootDir);
     return rootDir;
 }
 

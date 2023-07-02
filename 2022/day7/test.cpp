@@ -14,21 +14,23 @@ TEST(Day7Test, FindDirSizes) {
     // iterate through dirs
     std::vector<MyDir *> stack = std::vector<MyDir *>();
     stack.push_back(rootDir);
-    MyDir *curDir = nullptr;
+    MyDir **curDir = new MyDir *;
+    (*curDir) = rootDir;
     while (!stack.empty()) {
-        curDir = stack.back();
+        (*curDir) = stack.back();
         stack.pop_back();
+        // assert dir size
+        day7::find_dir_size(curDir);
+        ASSERT_EQ((*curDir)->size, WANT[(*curDir)->path])
+            << "Dir " << (*curDir)->path << " has size " << (*curDir)->size
+            << ", but expected " << WANT[(*curDir)->path];
         // add to stack of dirs to explore
-        for (auto &item : curDir->get_child_dirs()) {
+        for (auto &item : (*curDir)->get_child_dirs()) {
             MyDir *childDir = item.second;
             stack.push_back(childDir);
-            // assert dir size
-            day7::find_dir_size(childDir);
-            ASSERT_EQ(childDir->size, WANT[childDir->path])
-                << "Dir " << childDir->path << " has size " << childDir->size
-                << ", but expected " << WANT[childDir->path];
         }
     }
+    delete curDir;
 }
 
 TEST(Day7Test, GetSumOfSmallDirs) {
