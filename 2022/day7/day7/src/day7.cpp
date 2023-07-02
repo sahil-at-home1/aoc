@@ -105,7 +105,7 @@ MyDir *day7::gen_dirs(const std::string input_file) {
 
     // read file line by line
     while (getline(f, line)) {
-        std::cout << line << std::endl;
+        // std::cout << line << std::endl;
         // split line by spaces
         const std::string        delim = " ";
         std::vector<std::string> words;
@@ -147,17 +147,26 @@ MyDir *day7::read_filesystem(const std::string inputFile) {
 }
 
 // Problem 1: find all dirs with size <= a big size and add their sizes
-int day7::get_sum_of_small_dirs(MyDir *rootDir, int sumSizeOfSmallDirs) {
+int day7::get_sum_of_small_dirs(MyDir *rootDir) {
     const int BIG_SIZE = 100000;
     MyDir    *curDir = rootDir;
+    int       sumSizeOfSmallDirs = 0;
 
-    for (auto item : curDir->get_child_dirs()) {
-        std::string childDirName = item.first;
-        MyDir      *childDir = item.second;
-        if (childDir->size <= BIG_SIZE) {
-            sumSizeOfSmallDirs += childDir->size;
+    // iterate through dirs
+    std::vector<MyDir *> stack = std::vector<MyDir *>();
+    stack.push_back(rootDir);
+    while (!stack.empty()) {
+        curDir = stack.back();
+        stack.pop_back();
+        // check dir size
+        if (curDir->size <= BIG_SIZE) {
+            sumSizeOfSmallDirs += curDir->size;
         }
-        return day7::get_sum_of_small_dirs(childDir, sumSizeOfSmallDirs);
+        // add to stack of dirs to explore
+        for (auto &item : curDir->get_child_dirs()) {
+            MyDir *childDir = item.second;
+            stack.push_back(childDir);
+        }
     }
 
     return sumSizeOfSmallDirs;

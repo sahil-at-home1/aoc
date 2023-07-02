@@ -35,6 +35,6 @@ TEST(Day7Test, FindDirSizes) {
 
 TEST(Day7Test, GetSumOfSmallDirs) {
     MyDir *rootDir = day7::read_filesystem(testFile);
-    int    sumOfSmallDirs = day7::get_sum_of_small_dirs(rootDir, 0);
+    int    sumOfSmallDirs = day7::get_sum_of_small_dirs(rootDir);
     ASSERT_EQ(sumOfSmallDirs, 95437);
 }
