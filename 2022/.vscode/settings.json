@@ -6,6 +6,7 @@
   },
   "files.associations": {
     "system_error": "cpp",
-    "xlocale": "cpp"
+    "xlocale": "cpp",
+    "unordered_map": "cpp"
   }
 }

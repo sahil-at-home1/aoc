@@ -36,9 +36,9 @@ void handle_ls_dir(const std::string name, DirMap *dirs, MyDir **curDir) {
     }
     MyDir *subdir = nullptr;
     // create new directory if never seen before
-    if (dirs->find(name) == dirs->end()) {
+    if ((*curDir)->has_child_dir(name)) {
         subdir = new MyDir(name, (*curDir));
-        dirs->insert(make_pair(name, subdir));
+        dirs->insert(make_pair(subdir->path, subdir));
     } else {
         subdir = (*dirs)[name];
     }
@@ -68,10 +68,11 @@ void handle_cd(const std::string dir, DirMap *dirs, MyDir **curDir) {
 
     } else {
         // create new directory if never seen before
-        if (dirs->find(dir) == dirs->end()) {
+        if (!(*curDir)->has_child_dir(dir)) {
             MyDir *newDir = new MyDir(dir, (*curDir));
             (*curDir)->add_dir(newDir);
-            dirs->insert(make_pair(dir, newDir));
+            std::cout << "NEW DIRECTORY " << newDir->path << std::endl;
+            dirs->insert(make_pair(newDir->path, newDir));
         }
         // switch to specified directory
         (*curDir) = (*dirs)[dir];
@@ -101,6 +102,7 @@ void day7::gen_dir_map(const std::string input_file, DirMap *dirs) {
 
     // read file line by line
     while (getline(f, line)) {
+        std::cout << line << std::endl;
         // split line by spaces
         const std::string        delim = " ";
         std::vector<std::string> words;
