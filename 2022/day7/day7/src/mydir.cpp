@@ -1,5 +1,6 @@
 #include "mydir.h"
 #include "string.h"
+#include <unordered_map>
 
 MyDir::MyDir(std::string name, MyDir *parent) {
     this->parent = parent;
@@ -14,13 +15,20 @@ MyDir::MyDir(std::string name, MyDir *parent) {
     }
 }
 
-bool MyDir::has_child_dir(std::string name) {
-    for (auto childDir : this->dirs) {
-        if (childDir->name == name) {
-            return true;
-        }
+void MyDir::add_child_file(MyFile *file) { this->files.push_back(file); }
+
+void MyDir::add_child_dir(MyDir *dir) { this->dirs[dir->path] = dir; }
+
+std::unordered_map<std::string, MyDir *> MyDir::get_child_dirs() {
+    return this->dirs;
+}
+
+MyDir *MyDir::get_child_dir(std::string name) {
+    auto dir = this->dirs.find(name);
+    if (dir == this->dirs.end()) {
+        return nullptr;
     }
-    return false;
+    return dir->second;
 }
 
 std::ostream &operator<<(std::ostream &out, const MyDir &dir) {
@@ -33,7 +41,8 @@ std::ostream &operator<<(std::ostream &out, const MyDir &dir) {
     for (MyFile *file : dir.files) {
         out << " - " << *file;
     }
-    for (MyDir *subdir : dir.dirs) {
+    for (auto item : dir.dirs) {
+        MyDir *subdir = item.second;
         out << " - MyDir(" << subdir->path << ", " << subdir->size << ")"
             << std::endl;
     }

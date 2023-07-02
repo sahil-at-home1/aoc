@@ -3,21 +3,25 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class MyDir {
   public:
     int                   size;
     std::vector<MyFile *> files;
-    std::vector<MyDir *>  dirs;
     std::string           name;
     std::string           path;
     MyDir                *parent;
 
+  private:
+    std::unordered_map<std::string, MyDir *> dirs;
+
   public:
     MyDir(std::string name, MyDir *parent);
-    void                 add_dir(MyDir *dir) { this->dirs.push_back(dir); }
-    void                 add_file(MyFile *file) { this->files.push_back(file); }
-    bool                 has_child_dir(std::string name);
+    std::unordered_map<std::string, MyDir *> get_child_dirs();
+    void                                     add_child_dir(MyDir *dir);
+    MyDir                                   *get_child_dir(std::string);
+    void                                     add_child_file(MyFile *file);
     friend std::ostream &operator<<(std::ostream &out, const MyDir &dir);
 };

@@ -8,22 +8,31 @@ const string testFile = "c:/users/sahil/dev/aoc/2022/day7/ez_input.txt";
 TEST(Day7Test, FindDirSizes) {
     unordered_map<string, int> WANT = {
         {"/", 48381165}, {"/a", 94853}, {"/d", 24933642}, {"/a/e", 584}};
-    day7::DirMap *dirs = new day7::DirMap();
 
-    day7::gen_dir_map(testFile, dirs);
+    MyDir *rootDir = day7::gen_dirs(testFile);
 
-    for (auto &item : *dirs) {
-        MyDir *dir = item.second;
-        day7::find_dir_size(dir);
-        ASSERT_EQ(dir->size, WANT[dir->path])
-            << "Dir " << dir->path << " has size " << dir->size
-            << ", but expected " << WANT[dir->path];
+    // iterate through dirs
+    std::vector<MyDir *> stack = std::vector<MyDir *>();
+    stack.push_back(rootDir);
+    MyDir *curDir = nullptr;
+    while (!stack.empty()) {
+        curDir = stack.back();
+        stack.pop_back();
+        // add to stack of dirs to explore
+        for (auto &item : curDir->get_child_dirs()) {
+            MyDir *childDir = item.second;
+            stack.push_back(childDir);
+            // assert dir size
+            day7::find_dir_size(childDir);
+            ASSERT_EQ(childDir->size, WANT[childDir->path])
+                << "Dir " << childDir->path << " has size " << childDir->size
+                << ", but expected " << WANT[childDir->path];
+        }
     }
 }
 
 TEST(Day7Test, GetSumOfSmallDirs) {
-    day7::DirMap *dirs = new day7::DirMap();
-    day7::read_filesystem(testFile, dirs);
-    int sumOfSmallDirs = day7::get_sum_of_small_dirs(dirs);
+    MyDir *rootDir = day7::read_filesystem(testFile);
+    int    sumOfSmallDirs = day7::get_sum_of_small_dirs(rootDir, 0);
     ASSERT_EQ(sumOfSmallDirs, 95437);
 }
