@@ -62,3 +62,25 @@ void MyFileSystem::DFSReset() {
     this->DFSDir = this->rootDir;
     this->DFSStack.clear();
 }
+
+void MyFileSystem::mkdir(std::string newDirName) {
+    if (this->curDir == nullptr) {
+        std::cout << "current directory is null" << std::endl;
+        throw std::exception();
+    }
+    MyDir *newDir = nullptr;
+    // create new directory if never seen before
+    if (this->curDir->get_child_dir(newDirName) == nullptr) {
+        newDir = new MyDir(newDirName, this->curDir);
+        this->curDir->add_child_dir(newDir);
+        // std::cout << "NEW DIRECTORY " << newDir->path << std::endl;
+    }
+}
+
+void MyFileSystem::touch(std::string newFileName, int newFileSize) {
+    if (this->curDir == nullptr) {
+        std::cout << "current directory is null" << std::endl;
+        throw std::exception();
+    }
+    this->curDir->add_child_file(new MyFile(newFileName, newFileSize));
+}
