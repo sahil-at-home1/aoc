@@ -9,6 +9,7 @@ find_package(GTest CONFIG REQUIRED)
 add_library(Day7Lib 
     day7/day7/src/mydir.cpp 
     day7/day7/src/myfile.cpp 
+    day7/day7/src/myfilesystem.cpp 
     day7/day7/src/day7.cpp
     )
 

@@ -14,20 +14,37 @@ const MyDir *MyFileSystem::getRootDir() { return this->rootDir; }
 const MyDir *MyFileSystem::getCurDir() { return this->curDir; }
 MyDir       *MyFileSystem::getMutCurDir() { return this->curDir; }
 
-void MyFileSystem::SetCurDir(std::string newDirName) {
-    // check if dir in cur dir children
-    if (this->curDir->name != newDirName &&
-        this->curDir->get_child_dir(destDir)) {
-        std::cout << "the destination dir, " << newDirName
-                  << " not in current dir " << this->curDir << " children"
-                  << std::endl;
+void MyFileSystem::setCurDir(std::string newDirName) {
+    // std::cout << "CURRENT DIRECTORY: " << this->curDir << std::endl;
+    if (this->curDir == nullptr) {
+        std::cout << "current directory is null" << std::endl;
         throw std::exception();
     }
-    this->curDir = newDirName
+    if (newDirName == "..") {
+        if (this->curDir->parent == nullptr) {
+            std::cout << "the current directory, \"" << curDir->path
+                      << "\", has null parent" << std::endl;
+            throw std::exception();
+        }
+        this->curDir = curDir->parent;
+    } else {
+        // check if dir in cur dir children
+        if (this->curDir->name != newDirName &&
+            !this->curDir->get_child_dir(newDirName)) {
+            std::cout << "the destination dir, " << newDirName
+                      << " not in current dir " << *curDir << " children"
+                      << std::endl;
+            throw std::exception();
+        }
+        // switch to specified dir from current dir children
+        if (newDirName != "/") {
+            this->curDir = this->curDir->get_child_dir(newDirName);
+        }
+    }
 }
 
 // returns nullptr on end of iteration
-const MyDir *MyFileSystem::next(std::function<void(int)>) {
+const MyDir *MyFileSystem::DFSNextDir() {
     if (this->DFSStack.empty()) {
         return nullptr;
     }
@@ -36,7 +53,12 @@ const MyDir *MyFileSystem::next(std::function<void(int)>) {
     this->DFSStack.pop_back();
     // add to stack of dirs to explore
     for (auto &item : this->DFSDir->get_child_dirs()) {
-        stack.push_back(item.second);
+        this->DFSStack.push_back(item.second);
     }
     return this->DFSDir;
+}
+
+void MyFileSystem::DFSReset() {
+    this->DFSDir = this->rootDir;
+    this->DFSStack.clear();
 }
