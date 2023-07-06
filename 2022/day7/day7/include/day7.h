@@ -5,7 +5,7 @@
 
 namespace day7 {
 
-int           find_dir_size(MyDir *curDir);
+int           set_dir_size(MyDir *curDir);
 MyFileSystem *gen_filesystem(const std::string inputFile);
 int           get_sum_of_small_dirs(MyFileSystem *fs);
 

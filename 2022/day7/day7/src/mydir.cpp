@@ -2,6 +2,8 @@
 #include "string.h"
 #include <unordered_map>
 
+using namespace day7;
+
 MyDir::MyDir(std::string name, MyDir *parent) {
     this->parent = parent;
     this->name = name;
@@ -31,7 +33,7 @@ MyDir *MyDir::get_child_dir(std::string name) {
     return dir->second;
 }
 
-std::ostream &operator<<(std::ostream &out, const MyDir &dir) {
+std::ostream &operator<<(std::ostream &out, MyDir &dir) {
     std::string parentPath = "N/A";
     if (dir.parent) {
         parentPath = dir.parent->path;
@@ -41,7 +43,7 @@ std::ostream &operator<<(std::ostream &out, const MyDir &dir) {
     for (MyFile *file : dir.files) {
         out << " - " << *file;
     }
-    for (auto item : dir.dirs) {
+    for (auto &item : dir.get_child_dirs()) {
         MyDir *subdir = item.second;
         out << " - MyDir(" << subdir->name << ", " << subdir->size << ")"
             << std::endl;

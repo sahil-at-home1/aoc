@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
+namespace day7 {
 class MyDir {
   public:
     int                   size;
@@ -23,5 +24,6 @@ class MyDir {
     void                                     add_child_dir(MyDir *dir);
     MyDir                                   *get_child_dir(std::string);
     void                                     add_child_file(MyFile *file);
-    friend std::ostream &operator<<(std::ostream &out, const MyDir &dir);
+    friend std::ostream &operator<<(std::ostream &out, MyDir &dir);
 };
+}

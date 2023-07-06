@@ -4,10 +4,9 @@ int main() {
     std::string inputFile = "C:/users/sahil/dev/aoc/2022/day7/input.txt";
     // std::string inputFile = "C:/users/sahil/dev/aoc/2022/day7/ez_input.txt";
 
-    MyDir *rootDir = day7::read_filesystem(inputFile);
-    int    sumOfSmallDirs = day7::get_sum_of_small_dirs(rootDir);
+    day7::MyFileSystem *fs = day7::gen_filesystem(inputFile);
 
-    std::cout << *rootDir << std::endl;
+    int sumOfSmallDirs = day7::get_sum_of_small_dirs(fs);
 
     std::cout << "(Problem 1) The answer to the real input is: "
               << sumOfSmallDirs << std::endl;
