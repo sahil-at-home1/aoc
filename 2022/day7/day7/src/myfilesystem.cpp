@@ -1,6 +1,8 @@
 #include "myfilesystem.h"
 #include "mydir.h"
 
+using namespace day7;
+
 MyFileSystem::MyFileSystem() {
     this->rootDir = new MyDir("/", nullptr);
     this->curDir = this->rootDir;
@@ -10,9 +12,8 @@ MyFileSystem::MyFileSystem() {
     this->DFSStack.push_back(this->rootDir);
 }
 
-const MyDir *MyFileSystem::getRootDir() { return this->rootDir; }
-const MyDir *MyFileSystem::getCurDir() { return this->curDir; }
-MyDir       *MyFileSystem::getMutCurDir() { return this->curDir; }
+MyDir *MyFileSystem::getRootDir() { return this->rootDir; }
+MyDir *MyFileSystem::getCurDir() { return this->curDir; }
 
 void MyFileSystem::setCurDir(std::string newDirName) {
     // std::cout << "CURRENT DIRECTORY: " << this->curDir << std::endl;
@@ -44,7 +45,7 @@ void MyFileSystem::setCurDir(std::string newDirName) {
 }
 
 // returns nullptr on end of iteration
-const MyDir *MyFileSystem::DFSNextDir() {
+MyDir *MyFileSystem::DFSNextDir() {
     if (this->DFSStack.empty()) {
         return nullptr;
     }
