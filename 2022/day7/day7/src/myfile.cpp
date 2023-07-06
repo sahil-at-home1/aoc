@@ -2,6 +2,8 @@
 #include <iostream>
 #include <stdio.h>
 
+using namespace day7;
+
 MyFile::MyFile(std::string name, int size) {
     this->name = name;
     this->size = size;
