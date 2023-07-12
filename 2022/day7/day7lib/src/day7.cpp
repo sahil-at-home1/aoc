@@ -18,7 +18,7 @@ int day7::set_dir_size(day7::MyDir *curDir) {
         }
     }
     // recursively find size of subdirectories
-    if (curDir->files.size() > 0) {
+    if (curDir->get_child_dirs().size() > 0) {
         for (auto &item : curDir->get_child_dirs()) {
             MyDir *dir = item.second;
             total_size += day7::set_dir_size(dir);

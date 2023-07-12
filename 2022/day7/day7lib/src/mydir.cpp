@@ -43,7 +43,7 @@ std::ostream &day7::operator<<(std::ostream &out, day7::MyDir &dir) {
     for (int i = 0; i < dir.depth; i++) {
         out << "  ";
     }
-    out << "- " << dir.path << ", " << dir.size << std::endl;
+    out << "- " << dir.path << "/, " << dir.size << std::endl;
 
     // print subdirs
     for (auto &item : dir.get_child_dirs()) {

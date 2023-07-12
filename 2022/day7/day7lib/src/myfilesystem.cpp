@@ -46,8 +46,8 @@ day7::MyDir *day7::MyFileSystem::DFSNextDir() {
     if (this->DFSStack.empty()) {
         return nullptr;
     }
-    std::cout << "DFS: DFSDir: " << this->DFSDir->path << ", "
-              << this->DFSDir->size << std::endl;
+    // std::cout << "DFS: DFSDir: " << this->DFSDir->path << ", "
+    //           << this->DFSDir->size << std::endl;
     // pop next dir to explore from stack
     this->DFSDir = this->DFSStack.back();
     this->DFSStack.pop_back();

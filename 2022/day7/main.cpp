@@ -12,8 +12,8 @@ int main() {
 
     int sumOfSmallDirs = day7::get_sum_of_small_dirs(fs);
 
+    std::cout << *fs << std::endl;
+
     std::cout << "(Problem 1) The answer to the real input is: "
               << sumOfSmallDirs << std::endl;
-
-    std::cout << *fs << std::endl;
 }
