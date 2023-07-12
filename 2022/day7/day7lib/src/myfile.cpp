@@ -8,8 +8,7 @@ day7::MyFile::MyFile(std::string name, int size) {
 }
 
 std::ostream &day7::operator<<(std::ostream &out, const day7::MyFile &file) {
-    out << "MyFile(";
     out << file.name << ", ";
-    out << file.size << ")" << std::endl;
+    out << file.size << std::endl;
     return out;
 }

@@ -12,6 +12,7 @@ class MyFileSystem {
 
   public:
     MyFileSystem();
+    friend std::ostream &operator<<(std::ostream &out, MyFileSystem &fs);
     // setters/getters
     MyDir *getRootDir();
     MyDir *getCurDir();

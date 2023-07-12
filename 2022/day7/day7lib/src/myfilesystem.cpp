@@ -14,7 +14,6 @@ day7::MyDir *day7::MyFileSystem::getRootDir() { return this->rootDir; }
 day7::MyDir *day7::MyFileSystem::getCurDir() { return this->curDir; }
 
 void day7::MyFileSystem::setCurDir(std::string newDirName) {
-    // std::cout << "CURRENT DIRECTORY: " << this->curDir << std::endl;
     if (this->curDir == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
@@ -47,6 +46,8 @@ day7::MyDir *day7::MyFileSystem::DFSNextDir() {
     if (this->DFSStack.empty()) {
         return nullptr;
     }
+    std::cout << "DFS: DFSDir: " << this->DFSDir->path << ", "
+              << this->DFSDir->size << std::endl;
     // pop next dir to explore from stack
     this->DFSDir = this->DFSStack.back();
     this->DFSStack.pop_back();
@@ -82,4 +83,23 @@ void day7::MyFileSystem::touch(std::string newFileName, int newFileSize) {
         throw std::exception();
     }
     this->curDir->add_child_file(new day7::MyFile(newFileName, newFileSize));
+}
+
+std::ostream &day7::operator<<(std::ostream &out, day7::MyFileSystem &fs) {
+    std::string parentPath = "N/A";
+    out << "MyFileSystem(";
+    out << "rootDir: " << *fs.rootDir;
+
+    // iterate through dirs
+    day7::MyDir *dir = fs.DFSNextDir(); // guaranteed to have root
+    do {
+        if (dir != nullptr) {
+            std::cout << *dir << std::endl;
+        }
+        dir = fs.DFSNextDir();
+    } while (dir != nullptr);
+    fs.DFSReset();
+
+    out << ")" << std::endl;
+    return out;
 }

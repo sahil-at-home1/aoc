@@ -14,4 +14,6 @@ int main() {
 
     std::cout << "(Problem 1) The answer to the real input is: "
               << sumOfSmallDirs << std::endl;
+
+    std::cout << *fs << std::endl;
 }

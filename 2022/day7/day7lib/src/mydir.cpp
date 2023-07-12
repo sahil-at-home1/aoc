@@ -47,8 +47,7 @@ std::ostream &day7::operator<<(std::ostream &out, day7::MyDir &dir) {
     }
     for (auto &item : dir.get_child_dirs()) {
         day7::MyDir *subdir = item.second;
-        out << " - MyDir(" << subdir->name << ", " << subdir->size << ")"
-            << std::endl;
+        out << " - " << subdir->name << "/, " << subdir->size << std::endl;
     }
     out << " )" << std::endl;
     out << ")" << std::endl;
