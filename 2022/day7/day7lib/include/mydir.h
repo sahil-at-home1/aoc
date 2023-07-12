@@ -7,6 +7,7 @@
 #include <vector>
 
 namespace day7 {
+
 class MyDir {
   public:
     int                   size;
