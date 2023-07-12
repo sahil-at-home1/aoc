@@ -87,8 +87,8 @@ void day7::MyFileSystem::touch(std::string newFileName, int newFileSize) {
 
 std::ostream &day7::operator<<(std::ostream &out, day7::MyFileSystem &fs) {
     std::string parentPath = "N/A";
-    out << "MyFileSystem(";
-    out << "rootDir: " << *fs.rootDir;
+    out << "MyFileSystem" << std::endl;
+    out << *fs.rootDir;
 
     // iterate through dirs
     day7::MyDir *dir = fs.DFSNextDir(); // guaranteed to have root
@@ -100,6 +100,5 @@ std::ostream &day7::operator<<(std::ostream &out, day7::MyFileSystem &fs) {
     } while (dir != nullptr);
     fs.DFSReset();
 
-    out << ")" << std::endl;
     return out;
 }

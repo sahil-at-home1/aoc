@@ -7,10 +7,13 @@ day7::MyDir::MyDir(std::string name, MyDir *parent) {
     this->name = name;
     if (parent == nullptr) {
         this->path = name;
+        this->depth = 0;
     } else if (parent->path == "/") {
         this->path = parent->path + name;
+        this->depth = parent->depth + 1;
     } else {
         this->path = parent->path + "/" + name;
+        this->depth = parent->depth + 1;
     }
     this->size = 0;
 }
@@ -36,20 +39,26 @@ day7::MyDir *day7::MyDir::get_child_dir(std::string name) {
 }
 
 std::ostream &day7::operator<<(std::ostream &out, day7::MyDir &dir) {
-    std::string parentPath = "N/A";
-    if (dir.parent) {
-        parentPath = dir.parent->path;
+    // print number of indents corresponding to depth
+    for (int i = 0; i < dir.depth; i++) {
+        out << "  ";
     }
-    out << "MyDir(" << dir.name << ", " << dir.path << ", "
-        << "parent: " << parentPath << ", " << dir.size << ", (" << std::endl;
-    for (day7::MyFile *file : dir.files) {
-        out << " - " << *file;
-    }
+    out << "- " << dir.path << ", " << dir.size << std::endl;
+
+    // print subdirs
     for (auto &item : dir.get_child_dirs()) {
         day7::MyDir *subdir = item.second;
-        out << " - " << subdir->name << "/, " << subdir->size << std::endl;
+        out << *subdir;
     }
-    out << " )" << std::endl;
-    out << ")" << std::endl;
+
+    // print files
+    for (day7::MyFile *file : dir.files) {
+        // print number of indents corresponding to depth
+        for (int i = 0; i < dir.depth + 1; i++) {
+            out << "  ";
+        }
+        out << "- " << *file;
+    }
+
     return out;
 }

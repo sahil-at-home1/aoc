@@ -31,5 +31,7 @@ TEST(day7test, GetSumOfSmallDirs) {
 
     int sumOfSmallDirs = day7::get_sum_of_small_dirs(fs);
 
+    cout << *fs << std::endl;
+
     ASSERT_EQ(sumOfSmallDirs, 95437);
 }

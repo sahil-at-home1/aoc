@@ -15,6 +15,7 @@ class MyDir {
     std::string           name;
     std::string           path;
     MyDir                *parent;
+    int                   depth;
 
   private:
     std::unordered_map<std::string, MyDir *> dirs;
@@ -27,4 +28,4 @@ class MyDir {
     void                                     add_child_file(MyFile *file);
     friend std::ostream &operator<<(std::ostream &out, MyDir &dir);
 };
-}
+} // namespace day7
