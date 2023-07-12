@@ -26,6 +26,7 @@ TEST(day7test, FindDirSizes) {
     fs->DFSReset();
 }
 
+// part 1 test
 TEST(day7test, GetSumOfSmallDirs) {
     day7::MyFileSystem *fs = day7::gen_filesystem(testFile);
 
@@ -34,4 +35,15 @@ TEST(day7test, GetSumOfSmallDirs) {
     cout << *fs << std::endl;
 
     ASSERT_EQ(sumOfSmallDirs, 95437);
+}
+
+// part 2 test
+TEST(day7test, FreeSpace) {
+    day7::MyFileSystem *fs = day7::gen_filesystem(testFile);
+
+    int sizeOfDirToDelete = day7::get_size_of_smallest_dir_to_free_space(fs);
+
+    cout << *fs << std::endl;
+
+    ASSERT_EQ(sizeOfDirToDelete, 24933642);
 }

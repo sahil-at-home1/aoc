@@ -98,3 +98,30 @@ int day7::get_sum_of_small_dirs(day7::MyFileSystem *fs) {
 
     return sumSizeOfSmallDirs;
 }
+
+int day7::get_size_of_smallest_dir_to_free_space(day7::MyFileSystem *fs) {
+    const int SPACE_TOTAL = 70000000;
+    const int SPACE_NEEDED = 30000000;
+    const int SPACE_USED = fs->getRootDir()->size;
+
+    std::cout << SPACE_USED << std::endl;
+
+    int sizeOfDeletedDir = 0;
+
+    // iterate through dirs
+    day7::MyDir *dir = fs->DFSNextDir(); // guaranteed to have root
+    do {
+        // check if deleting dir would free enough space
+        if (SPACE_TOTAL - (SPACE_USED - dir->size) >= SPACE_NEEDED) {
+            // check if this dir is smaller than previous thought dir
+            if (dir->size < sizeOfDeletedDir) {
+                sizeOfDeletedDir = dir->size;
+            }
+        }
+        // iterate
+        dir = fs->DFSNextDir();
+    } while (dir != nullptr);
+    fs->DFSReset();
+
+    return sizeOfDeletedDir;
+}
