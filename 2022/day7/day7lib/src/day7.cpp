@@ -5,9 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-using namespace day7;
-
-int set_dir_size(MyDir *curDir) {
+int day7::set_dir_size(day7::MyDir *curDir) {
     if (curDir == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
@@ -30,10 +28,10 @@ int set_dir_size(MyDir *curDir) {
     return curDir->size;
 }
 
-MyFileSystem *day7::gen_filesystem(const std::string inputFile) {
-    MyFileSystem *fs = new MyFileSystem();
-    std::string   line;
-    std::ifstream f;
+day7::MyFileSystem *day7::gen_filesystem(const std::string inputFile) {
+    day7::MyFileSystem *fs = new day7::MyFileSystem();
+    std::string         line;
+    std::ifstream       f;
 
     f.open(inputFile);
     if (!f.is_open()) {
@@ -82,12 +80,12 @@ MyFileSystem *day7::gen_filesystem(const std::string inputFile) {
 }
 
 // Problem 1: find all dirs with size <= a big size and add their sizes
-int get_sum_of_small_dirs(MyFileSystem *fs) {
+int day7::get_sum_of_small_dirs(day7::MyFileSystem *fs) {
     const int BIG_SIZE = 100000;
     int       sumSizeOfSmallDirs = 0;
 
     // iterate through dirs
-    MyDir *dir = fs->DFSNextDir(); // guaranteed to have root
+    day7::MyDir *dir = fs->DFSNextDir(); // guaranteed to have root
     do {
         // check dir size
         if (dir->size <= BIG_SIZE) {

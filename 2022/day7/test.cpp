@@ -5,7 +5,7 @@ using namespace std;
 
 const string testFile = "c:/users/sahil/dev/aoc/2022/day7/ez_input.txt";
 
-TEST(Day7Test, FindDirSizes) {
+TEST(day7test, FindDirSizes) {
     unordered_map<string, int> WANT = {
         {"/", 48381165}, {"/a", 94853}, {"/d", 24933642}, {"/a/e", 584}};
 
@@ -25,7 +25,7 @@ TEST(Day7Test, FindDirSizes) {
     fs->DFSReset();
 }
 
-TEST(Day7Test, GetSumOfSmallDirs) {
+TEST(day7test, GetSumOfSmallDirs) {
     day7::MyFileSystem *fs = day7::gen_filesystem(testFile);
 
     int sumOfSmallDirs = day7::get_sum_of_small_dirs(fs);

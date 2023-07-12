@@ -2,9 +2,7 @@
 #include "string.h"
 #include <unordered_map>
 
-using namespace day7;
-
-MyDir::MyDir(std::string name, MyDir *parent) {
+day7::MyDir::MyDir(std::string name, MyDir *parent) {
     this->parent = parent;
     this->name = name;
     if (parent == nullptr) {
@@ -17,15 +15,19 @@ MyDir::MyDir(std::string name, MyDir *parent) {
     this->size = 0;
 }
 
-void MyDir::add_child_file(MyFile *file) { this->files.push_back(file); }
+void day7::MyDir::add_child_file(day7::MyFile *file) {
+    this->files.push_back(file);
+}
 
-void MyDir::add_child_dir(MyDir *dir) { this->dirs[dir->name] = dir; }
+void day7::MyDir::add_child_dir(day7::MyDir *dir) {
+    this->dirs[dir->name] = dir;
+}
 
-std::unordered_map<std::string, MyDir *> MyDir::get_child_dirs() {
+std::unordered_map<std::string, day7::MyDir *> day7::MyDir::get_child_dirs() {
     return this->dirs;
 }
 
-MyDir *MyDir::get_child_dir(std::string name) {
+day7::MyDir *day7::MyDir::get_child_dir(std::string name) {
     auto dir = this->dirs.find(name);
     if (dir == this->dirs.end()) {
         return nullptr;
@@ -33,18 +35,18 @@ MyDir *MyDir::get_child_dir(std::string name) {
     return dir->second;
 }
 
-std::ostream &operator<<(std::ostream &out, MyDir &dir) {
+std::ostream &operator<<(std::ostream &out, day7::MyDir &dir) {
     std::string parentPath = "N/A";
     if (dir.parent) {
         parentPath = dir.parent->path;
     }
     out << "MyDir(" << dir.name << ", " << dir.path << ", "
         << "parent: " << parentPath << ", " << dir.size << ", (" << std::endl;
-    for (MyFile *file : dir.files) {
+    for (day7::MyFile *file : dir.files) {
         out << " - " << *file;
     }
     for (auto &item : dir.get_child_dirs()) {
-        MyDir *subdir = item.second;
+        day7::MyDir *subdir = item.second;
         out << " - MyDir(" << subdir->name << ", " << subdir->size << ")"
             << std::endl;
     }

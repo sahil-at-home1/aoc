@@ -1,4 +1,4 @@
-#include "day7lib/include/day7.h"
+#include "day7.h"
 
 int main() {
     std::string inputFile = "C:/users/sahil/dev/aoc/2022/day7/input.txt";

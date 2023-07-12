@@ -1,9 +1,7 @@
 #include "myfilesystem.h"
 #include "mydir.h"
 
-using namespace day7;
-
-MyFileSystem::MyFileSystem() {
+day7::MyFileSystem::MyFileSystem() {
     this->rootDir = new MyDir("/", nullptr);
     this->curDir = this->rootDir;
     // prepare for DFS file system iteration
@@ -12,10 +10,10 @@ MyFileSystem::MyFileSystem() {
     this->DFSStack.push_back(this->rootDir);
 }
 
-MyDir *MyFileSystem::getRootDir() { return this->rootDir; }
-MyDir *MyFileSystem::getCurDir() { return this->curDir; }
+day7::MyDir *day7::MyFileSystem::getRootDir() { return this->rootDir; }
+day7::MyDir *day7::MyFileSystem::getCurDir() { return this->curDir; }
 
-void MyFileSystem::setCurDir(std::string newDirName) {
+void day7::MyFileSystem::setCurDir(std::string newDirName) {
     // std::cout << "CURRENT DIRECTORY: " << this->curDir << std::endl;
     if (this->curDir == nullptr) {
         std::cout << "current directory is null" << std::endl;
@@ -45,7 +43,7 @@ void MyFileSystem::setCurDir(std::string newDirName) {
 }
 
 // returns nullptr on end of iteration
-MyDir *MyFileSystem::DFSNextDir() {
+day7::MyDir *day7::MyFileSystem::DFSNextDir() {
     if (this->DFSStack.empty()) {
         return nullptr;
     }
@@ -59,12 +57,12 @@ MyDir *MyFileSystem::DFSNextDir() {
     return this->DFSDir;
 }
 
-void MyFileSystem::DFSReset() {
+void day7::MyFileSystem::DFSReset() {
     this->DFSDir = this->rootDir;
     this->DFSStack.clear();
 }
 
-void MyFileSystem::mkdir(std::string newDirName) {
+void day7::MyFileSystem::mkdir(std::string newDirName) {
     if (this->curDir == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
@@ -78,10 +76,10 @@ void MyFileSystem::mkdir(std::string newDirName) {
     }
 }
 
-void MyFileSystem::touch(std::string newFileName, int newFileSize) {
+void day7::MyFileSystem::touch(std::string newFileName, int newFileSize) {
     if (this->curDir == nullptr) {
         std::cout << "current directory is null" << std::endl;
         throw std::exception();
     }
-    this->curDir->add_child_file(new MyFile(newFileName, newFileSize));
+    this->curDir->add_child_file(new day7::MyFile(newFileName, newFileSize));
 }
