@@ -35,7 +35,7 @@ day7::MyDir *day7::MyDir::get_child_dir(std::string name) {
     return dir->second;
 }
 
-std::ostream &operator<<(std::ostream &out, day7::MyDir &dir) {
+std::ostream &day7::operator<<(std::ostream &out, day7::MyDir &dir) {
     std::string parentPath = "N/A";
     if (dir.parent) {
         parentPath = dir.parent->path;

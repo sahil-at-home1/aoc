@@ -1,12 +1,14 @@
 {
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "cmake.configureSettings": {
-    "CMAKE_TOOLCHAIN_FILE": "C:/Users/sahil/dev/aoc/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    // "CMAKE_TOOLCHAIN_FILE": "C:/Users/sahil/dev/aoc/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    "CMAKE_TOOLCHAIN_FILE": "/home/sahil/dev/aoc/vcpkg/scripts/buildsystems/vcpkg.cmake"
   },
   "files.associations": {
     "system_error": "cpp",
     "xlocale": "cpp",
     "unordered_map": "cpp"
   },
-  "cmake.sourceDirectory": "C:/Users/sahil/dev/aoc/2022"
+  // "cmake.sourceDirectory": "C:/Users/sahil/dev/aoc/2022"
+  "cmake.sourceDirectory": "/home/sahil/dev/aoc/2022"
 }

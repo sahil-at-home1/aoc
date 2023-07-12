@@ -11,5 +11,5 @@ target_link_libraries(day7test PUBLIC day7lib GTest::gtest GTest::gtest_main)
 target_link_libraries(day7main PUBLIC day7lib)
 
 include(GoogleTest)
-gtest_discover_tests(Day7Test)
+# gtest_discover_tests(day7test)
 
