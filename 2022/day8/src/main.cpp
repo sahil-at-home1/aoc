@@ -8,17 +8,42 @@
 
 const std::string inputFile = "/home/sahil/dev/aoc/2022/day8/input/small.txt";
 
+enum class Sightline {
+    RightToLeft,
+    LeftToRight,
+    TopToBot,
+    BotToTop,
+};
+const std::vector<Sightline> SightlineValues = {Sightline::RightToLeft,
+                                                Sightline::LeftToRight,
+                                                Sightline::TopToBot,
+                                                Sightline::BotToTop}
+
 class Tree {
   public:
-    int  height;
-    bool visible;
+    int                                 height;
+    std::unordered_map<Sightline, bool> visibility;
+
+  public:
     Tree(int height);
     ~Tree();
+    bool is_visible();
 };
 
 Tree::Tree(int height) {
     this->height = height;
-    this->visible = true; // default
+    for (auto &sightline : SightlineValues) {
+        this->visibility[sightline] = false;
+    }
+}
+
+Tree::is_visible() {
+    for (auto &sightline : SightlineValues) {
+        if (this->visibility[sightline] == false) {
+            return false;
+        }
+    }
+    return true;
 }
 
 int main() {
@@ -56,14 +81,49 @@ int main() {
     f.close();
 
     // traverse forest to determine tree visibility
-    for (int i = 0; i < forest.size(); i++) {
-        for (int j = 0; j < forest[i].size(); j++) {
-            Tree *tree = forest[i][j];
-            if (i == 0 || j == 0) {
-                // trees on edges of forest are visible
-                tree->visible = true;
-            } else {
-                // check trees between it and edge of grid on 4 sides
+    for (auto &direction : [ "left", "right" ]) {
+        int hStart = 0;
+        int hEnd = 0;
+        int hIncrement = 1;
+        int vStart = 0;
+        int vEnd = 0;
+        int vIncrement = 1;
+        if (direction == "left") {
+            // check visibility from left to right
+            hStart = 0;
+            hEnd = forest.size();
+            hIncrement = 1;
+        } else {
+            // check visibility from right to left;
+            hStart = forest.size();
+            hEnd = -1;
+            hIncrement = -1;
+        }
+    }
+
+    for (auto &direction : [ "top", "bot" ]) {
+        int hStart = 0;
+        int hEnd = 0;
+        int vStart = 0;
+        int vEnd = 0;
+        int vIncrement = 1;
+        if (direction == "top") {
+            vStart = 0;
+            vEnd = forest.size();
+            vIncrement = 1;
+        } else {
+            vStart = forest.size();
+            vEnd = -1;
+            vIncrement = -1;
+        }
+        for (int col = vStart; col < vEnd; col += vIncrement) {
+            for (int row = hStart; row < hEnd; row += hIncrement) {
+                Tree *tree = forest[row][col];
+                if (row == 0) {
+                    tree->visible = true;
+                } else {
+                    // check trees between it and edge of grid on 4 sides
+                }
             }
         }
     }
