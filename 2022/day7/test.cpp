@@ -3,8 +3,8 @@
 
 using namespace std;
 
-// const string testFile = "c:/users/sahil/dev/aoc/2022/day7/ez_input.txt";
-const string testFile = "/home/sahil/dev/aoc/2022/day7/ez_input.txt";
+const string testFile = "c:/users/sahil/dev/aoc/2022/day7/ez_input.txt";
+// const string testFile = "/home/sahil/dev/aoc/2022/day7/ez_input.txt";
 
 TEST(day7test, FindDirSizes) {
     unordered_map<string, int> WANT = {
