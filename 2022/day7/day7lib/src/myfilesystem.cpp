@@ -61,6 +61,7 @@ day7::MyDir *day7::MyFileSystem::DFSNextDir() {
 void day7::MyFileSystem::DFSReset() {
     this->DFSDir = this->rootDir;
     this->DFSStack.clear();
+    this->DFSStack.push_back(this->DFSDir);
 }
 
 void day7::MyFileSystem::mkdir(std::string newDirName) {

@@ -16,4 +16,9 @@ int main() {
 
     std::cout << "(Problem 1) The answer to the real input is: "
               << sumOfSmallDirs << std::endl;
+
+    int sizeOfDirToDelete = day7::get_size_of_smallest_dir_to_free_space(fs);
+
+    std::cout << "(Problem 2) The answer to the real input is: "
+              << sizeOfDirToDelete << std::endl;
 }

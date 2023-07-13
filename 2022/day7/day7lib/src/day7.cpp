@@ -104,19 +104,19 @@ int day7::get_size_of_smallest_dir_to_free_space(day7::MyFileSystem *fs) {
     const int SPACE_NEEDED = 30000000;
     const int SPACE_USED = fs->getRootDir()->size;
 
-    std::cout << SPACE_USED << std::endl;
-
     int sizeOfDeletedDir = SPACE_USED;
 
     // iterate through dirs
     day7::MyDir *dir = fs->DFSNextDir(); // guaranteed to have root
     do {
-        std::cout << dir->name << ", " << dir->size << std::endl;
-        // check if deleting dir would free enough space
-        if (SPACE_TOTAL - (SPACE_USED - dir->size) >= SPACE_NEEDED) {
-            // check if this dir is smaller than previous thought dir
-            if (dir->size < sizeOfDeletedDir) {
-                sizeOfDeletedDir = dir->size;
+        if (dir != nullptr) {
+            // check if deleting dir would free enough space
+            int new_free_space = SPACE_TOTAL - (SPACE_USED - dir->size);
+            if (new_free_space >= SPACE_NEEDED) {
+                // check if this dir is smaller than previous thought dir
+                if (dir->size < sizeOfDeletedDir) {
+                    sizeOfDeletedDir = dir->size;
+                }
             }
         }
         // iterate
