@@ -1,4 +1,4 @@
-#include "day8.h"
+#include "day8lib.h"
 #include "gtest/gtest.h"
 
 using namespace std;
