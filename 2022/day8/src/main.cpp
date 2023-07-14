@@ -30,7 +30,8 @@ class Tree {
   public:
     Tree(int height);
     ~Tree();
-    bool is_visible();
+    bool                 is_visible();
+    friend std::ostream &operator<<(std::ostream &out, Tree const &tree);
 };
 
 Tree::Tree(int height) {
@@ -49,6 +50,15 @@ bool Tree::is_visible() {
     return true;
 }
 
+std::ostream &operator<<(std::ostream &out, Tree &tree) {
+    out << "(" << tree.height << ":";
+    for (auto &sightline : SightlineValues) {
+        out << (tree.visibility[sightline] ? "Y" : "N");
+    }
+    out << ")";
+    return out;
+}
+
 int main() {
     // read input
     std::string   line;
@@ -63,22 +73,16 @@ int main() {
     // create forest of trees by reading file
     std::vector<std::vector<Tree *>> forest;
     while (getline(f, line)) {
-        // split line by spaces
-        const std::string        delim = " ";
-        std::vector<std::string> words;
-        size_t                   end = line.find(delim);
-        while (end != std::string::npos) {
-            words.push_back(line.substr(0, end));
-            line = line.substr(end + delim.length(), line.length());
-            end = line.find(delim);
-        }
-        words.push_back(line);
-        // create trees for this row
+        // get digits from line to create trees for this row
         std::vector<Tree *> forestRow = std::vector<Tree *>();
-        for (auto &height : words) {
-            forestRow.push_back(new Tree(std::stoi(height)));
+        for (auto &c : line) {
+            char heightChar =
+                c; // copy so pointer doesn't include rest of string
+            int height = atoi(&heightChar);
+            std::cout << c << " interpreted as " << height << std::endl;
+            forestRow.push_back(new Tree(height));
         }
-        // add row to forest grid
+        // add row of trees to forest grid
         forest.push_back(forestRow);
     }
     f.close();
@@ -167,4 +171,12 @@ int main() {
             }
         }
     }
+
+    for (auto &row : forest) {
+        for (auto &tree : row) {
+            std::cout << *tree << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "There are " << visibleCount << " visible trees" << std::endl;
 }
