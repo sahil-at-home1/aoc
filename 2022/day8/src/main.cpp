@@ -1,12 +1,16 @@
-#include "day8lib.h"
+// #include "day8lib.h"
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
-#include <string.h>
+#include <string>
+#include <unordered_map>
 #include <vector>
 
-const std::string inputFile = "/home/sahil/dev/aoc/2022/day8/input/small.txt";
+// const std::string inputFile =
+// "/home/sahil/dev/aoc/2022/day8/input/small.txt";
+const std::string inputFile =
+    "C:/users/sahil/dev/aoc/2022/day8/input/small.txt";
 
 enum class Sightline {
     RightToLeft,
@@ -14,10 +18,9 @@ enum class Sightline {
     TopToBot,
     BotToTop,
 };
-const std::vector<Sightline> SightlineValues = {Sightline::RightToLeft,
-                                                Sightline::LeftToRight,
-                                                Sightline::TopToBot,
-                                                Sightline::BotToTop}
+const std::vector<Sightline> SightlineValues = {
+    Sightline::RightToLeft, Sightline::LeftToRight, Sightline::TopToBot,
+    Sightline::BotToTop};
 
 class Tree {
   public:
@@ -37,7 +40,7 @@ Tree::Tree(int height) {
     }
 }
 
-Tree::is_visible() {
+bool Tree::is_visible() {
     for (auto &sightline : SightlineValues) {
         if (this->visibility[sightline] == false) {
             return false;
@@ -73,7 +76,7 @@ int main() {
         // create trees for this row
         std::vector<Tree *> forestRow = std::vector<Tree *>();
         for (auto &height : words) {
-            forestRow.push_back(new Tree(stoi(height)));
+            forestRow.push_back(new Tree(std::stoi(height)));
         }
         // add row to forest grid
         forest.push_back(forestRow);
@@ -81,14 +84,15 @@ int main() {
     f.close();
 
     // traverse forest to determine tree visibility
-    for (auto &direction : [ "left", "right" ]) {
+    // check partial visibility along sightlines for each direction
+    for (auto &sightline : {Sightline::LeftToRight, Sightline::RightToLeft}) {
         int hStart = 0;
         int hEnd = 0;
         int hIncrement = 1;
         int vStart = 0;
         int vEnd = 0;
         int vIncrement = 1;
-        if (direction == "left") {
+        if (sightline == Sightline::LeftToRight) {
             // check visibility from left to right
             hStart = 0;
             hEnd = forest.size();
@@ -99,15 +103,34 @@ int main() {
             hEnd = -1;
             hIncrement = -1;
         }
+        int maxHeight = 0;
+        for (int row = hStart; row != hEnd; row += hIncrement) {
+            for (int col = vStart; col != vEnd; col += vIncrement) {
+                Tree *tree = forest[row][col];
+                // check if tree is on edge
+                if ((sightline == Sightline::LeftToRight && col == vStart) ||
+                    (sightline == Sightline::RightToLeft && col == vEnd)) {
+                    tree->visibility[sightline] = true;
+                    continue;
+                }
+                // check if tree is taller than all other trees along
+                if (tree->height > maxHeight) {
+                    tree->visibility[sightline] = true;
+                    maxHeight = tree->height;
+                }
+            }
+        }
     }
 
-    for (auto &direction : [ "top", "bot" ]) {
+    // check vertical sightlines because inner/outer loop swapped
+    for (auto &sightline : {Sightline::TopToBot, Sightline::BotToTop}) {
         int hStart = 0;
         int hEnd = 0;
+        int hIncrement = 1;
         int vStart = 0;
         int vEnd = 0;
         int vIncrement = 1;
-        if (direction == "top") {
+        if (sightline == Sightline::TopToBot) {
             vStart = 0;
             vEnd = forest.size();
             vIncrement = 1;
@@ -116,14 +139,31 @@ int main() {
             vEnd = -1;
             vIncrement = -1;
         }
-        for (int col = vStart; col < vEnd; col += vIncrement) {
-            for (int row = hStart; row < hEnd; row += hIncrement) {
+        int maxHeight = 0;
+        for (int col = vStart; col != vEnd; col += vIncrement) {
+            for (int row = hStart; row != hEnd; row += hIncrement) {
                 Tree *tree = forest[row][col];
-                if (row == 0) {
-                    tree->visible = true;
-                } else {
-                    // check trees between it and edge of grid on 4 sides
+                // check if tree is on edge
+                if ((sightline == Sightline::LeftToRight && row == hStart) ||
+                    (sightline == Sightline::RightToLeft && row == hEnd)) {
+                    tree->visibility[sightline] = true;
+                    continue;
                 }
+                // check if tree is taller than all other trees along sightline
+                if (tree->height > maxHeight) {
+                    tree->visibility[sightline] = true;
+                    maxHeight = tree->height;
+                }
+            }
+        }
+    }
+
+    // check visibility of each tree
+    int visibleCount = 0;
+    for (int row = 0; row < forest.size(); row++) {
+        for (int col = 0; col < forest.size(); col++) {
+            if (forest[row][col]->is_visible()) {
+                visibleCount += 1;
             }
         }
     }
