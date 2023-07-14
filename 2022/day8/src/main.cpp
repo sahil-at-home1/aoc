@@ -59,6 +59,110 @@ std::ostream &operator<<(std::ostream &out, Tree &tree) {
     return out;
 }
 
+void check_left_to_right(std::vector<std::vector<Tree *>> *forest, int n) {
+    int hStart = 0;
+    int hEnd = n;
+    int hIncrement = 1;
+    int vStart = 0;
+    int vEnd = n;
+    int vIncrement = 1;
+
+    int maxHeight = 0;
+    for (int h = hStart; h != hEnd; h += hIncrement) {
+        for (int v = vStart; v != vEnd; v += vIncrement) {
+            Tree *tree = (*forest)[h][v];
+            // check if tree is on edge
+            if (v == vStart) {
+                tree->visibility[Sightline::LeftToRight] = true;
+                continue;
+            }
+            // check if tree is taller than all other trees along sightline
+            if (tree->height > maxHeight) {
+                tree->visibility[Sightline::LeftToRight] = true;
+                maxHeight = tree->height;
+            }
+        }
+    }
+}
+
+void check_right_to_left(std::vector<std::vector<Tree *>> *forest, int n) {
+    int hStart = n - 1;
+    int hEnd = -1;
+    int hIncrement = -1;
+    int vStart = 0;
+    int vEnd = n;
+    int vIncrement = 1;
+
+    int maxHeight = 0;
+    for (int h = hStart; h != hEnd; h += hIncrement) {
+        for (int v = vStart; v != vEnd; v += vIncrement) {
+            Tree *tree = (*forest)[h][v];
+            // check if tree is on edge
+            if (v == vStart) {
+                tree->visibility[Sightline::RightToLeft] = true;
+                continue;
+            }
+            // check if tree is taller than all other trees along sightline
+            if (tree->height > maxHeight) {
+                tree->visibility[Sightline::RightToLeft] = true;
+                maxHeight = tree->height;
+            }
+        }
+    }
+}
+
+void check_top_to_bot(std::vector<std::vector<Tree *>> *forest, int n) {
+    int hStart = 0;
+    int hEnd = n;
+    int hIncrement = 1;
+    int vStart = 0;
+    int vEnd = n;
+    int vIncrement = 1;
+
+    int maxHeight = 0;
+    for (int v = vStart; v != vEnd; v += vIncrement) {
+        for (int h = hStart; h != hEnd; h += hIncrement) {
+            Tree *tree = (*forest)[h][v];
+            // check if tree is on edge
+            if (h == hStart) {
+                tree->visibility[Sightline::TopToBot] = true;
+                continue;
+            }
+            // check if tree is taller than all other trees along sightline
+            if (tree->height > maxHeight) {
+                tree->visibility[Sightline::TopToBot] = true;
+                maxHeight = tree->height;
+            }
+        }
+    }
+}
+
+void check_bot_to_top(std::vector<std::vector<Tree *>> *forest, int n) {
+    int hStart = 0;
+    int hEnd = n;
+    int hIncrement = 1;
+    int vStart = n - 1;
+    int vEnd = -1;
+    int vIncrement = -1;
+
+    int maxHeight = 0;
+    for (int v = vStart; v != vEnd; v += vIncrement) {
+        for (int h = hStart; h != hEnd; h += hIncrement) {
+            Tree *tree = (*forest)[h][v];
+            // check if tree is on edge
+            if (h == hStart) {
+                tree->visibility[Sightline::TopToBot] = true;
+                continue;
+            }
+            // check if tree is taller than all other trees along sightline
+            if (tree->height > maxHeight) {
+                tree->visibility[Sightline::TopToBot] = true;
+                maxHeight = tree->height;
+            }
+        }
+    }
+}
+
 int main() {
     // read input
     std::string   line;
@@ -87,78 +191,21 @@ int main() {
     }
     f.close();
 
-    // traverse forest to determine tree visibility
-    // check partial visibility along sightlines for each direction
-    for (auto &sightline : {Sightline::LeftToRight, Sightline::RightToLeft}) {
-        int hStart = 0;
-        int hEnd = 0;
-        int hIncrement = 1;
-        int vStart = 0;
-        int vEnd = 0;
-        int vIncrement = 1;
-        if (sightline == Sightline::LeftToRight) {
-            // check visibility from left to right
-            hStart = 0;
-            hEnd = forest.size();
-            hIncrement = 1;
-        } else {
-            // check visibility from right to left;
-            hStart = forest.size();
-            hEnd = -1;
-            hIncrement = -1;
-        }
-        int maxHeight = 0;
-        for (int row = hStart; row != hEnd; row += hIncrement) {
-            for (int col = vStart; col != vEnd; col += vIncrement) {
-                Tree *tree = forest[row][col];
-                // check if tree is on edge
-                if ((sightline == Sightline::LeftToRight && col == vStart) ||
-                    (sightline == Sightline::RightToLeft && col == vEnd)) {
-                    tree->visibility[sightline] = true;
-                    continue;
-                }
-                // check if tree is taller than all other trees along
-                if (tree->height > maxHeight) {
-                    tree->visibility[sightline] = true;
-                    maxHeight = tree->height;
-                }
-            }
-        }
-    }
-
     // check vertical sightlines because inner/outer loop swapped
-    for (auto &sightline : {Sightline::TopToBot, Sightline::BotToTop}) {
-        int hStart = 0;
-        int hEnd = 0;
-        int hIncrement = 1;
-        int vStart = 0;
-        int vEnd = 0;
-        int vIncrement = 1;
-        if (sightline == Sightline::TopToBot) {
-            vStart = 0;
-            vEnd = forest.size();
-            vIncrement = 1;
-        } else {
-            vStart = forest.size();
-            vEnd = -1;
-            vIncrement = -1;
-        }
-        int maxHeight = 0;
-        for (int col = vStart; col != vEnd; col += vIncrement) {
-            for (int row = hStart; row != hEnd; row += hIncrement) {
-                Tree *tree = forest[row][col];
-                // check if tree is on edge
-                if ((sightline == Sightline::LeftToRight && row == hStart) ||
-                    (sightline == Sightline::RightToLeft && row == hEnd)) {
-                    tree->visibility[sightline] = true;
-                    continue;
-                }
-                // check if tree is taller than all other trees along sightline
-                if (tree->height > maxHeight) {
-                    tree->visibility[sightline] = true;
-                    maxHeight = tree->height;
-                }
-            }
+    for (auto &sightline : SightlineValues) {
+        switch (sightline) {
+        case Sightline::LeftToRight:
+            check_left_to_right(&forest, forest.size());
+            break;
+        case Sightline::RightToLeft:
+            check_right_to_left(&forest, forest.size());
+            break;
+        case Sightline::TopToBot:
+            check_top_to_bot(&forest, forest.size());
+            break;
+        case Sightline::BotToTop:
+            check_bot_to_top(&forest, forest.size());
+            break;
         }
     }
 
