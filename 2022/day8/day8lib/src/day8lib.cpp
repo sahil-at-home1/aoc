@@ -7,31 +7,6 @@
 #include <unordered_map>
 #include <vector>
 
-day8::Tree::Tree(int height) {
-    this->height = height;
-    for (auto &sightline : day8::SightlineValues) {
-        this->visibility[sightline] = false;
-    }
-}
-
-bool day8::Tree::is_visible() {
-    for (auto &sightline : day8::SightlineValues) {
-        if (this->visibility[sightline] == false) {
-            return false;
-        }
-    }
-    return true;
-}
-
-std::ostream &day8::operator<<(std::ostream &out, day8::Tree &tree) {
-    out << "(" << tree.height << ":";
-    for (auto &sightline : day8::SightlineValues) {
-        out << (tree.visibility[sightline] ? "Y" : "N");
-    }
-    out << ")";
-    return out;
-}
-
 void day8::check_left_to_right(std::vector<std::vector<day8::Tree *>> *forest,
                                int                                     n) {
     int hStart = 0;

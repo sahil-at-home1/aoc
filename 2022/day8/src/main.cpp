@@ -29,10 +29,8 @@ int main() {
         // get digits from line to create trees for this row
         std::vector<day8::Tree *> forestRow = std::vector<day8::Tree *>();
         for (auto &c : line) {
-            char heightChar =
-                c; // copy so pointer doesn't include rest of string
-            int height = atoi(&heightChar);
-            std::cout << c << " interpreted as " << height << std::endl;
+            char heightChar = c; // copy so ptr doesn't include rest of string
+            int  height = atoi(&heightChar);
             forestRow.push_back(new day8::Tree(height));
         }
         // add row of trees to forest grid
@@ -68,11 +66,15 @@ int main() {
         }
     }
 
-    for (auto &row : forest) {
-        for (auto &tree : row) {
-            std::cout << *tree << " ";
+    for (auto &sightline : day8::SightlineValues) {
+        std::cout << "Checking sightline: " << sightline << std::endl;
+        for (auto &row : forest) {
+            for (auto &tree : row) {
+                std::string vis = tree->visibility[sightline] ? "Y" : "N";
+                std::cout << "(" << tree->height << ":" << vis << ") ";
+            }
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
     }
     std::cout << "There are " << visibleCount << " visible trees" << std::endl;
 }
