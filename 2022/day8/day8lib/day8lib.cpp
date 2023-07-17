@@ -23,7 +23,7 @@ bool day8::Tree::is_visible() {
     return true;
 }
 
-std::ostream &operator<<(std::ostream &out, day8::Tree &tree) {
+std::ostream &day8::operator<<(std::ostream &out, day8::Tree &tree) {
     out << "(" << tree.height << ":";
     for (auto &sightline : day8::SightlineValues) {
         out << (tree.visibility[sightline] ? "Y" : "N");

@@ -26,7 +26,7 @@ class Tree {
     Tree(int height);
     ~Tree();
     bool                 is_visible();
-    friend std::ostream &operator<<(std::ostream &out, Tree const &tree);
+    friend std::ostream &operator<<(std::ostream &out, Tree &tree);
 };
 
 void check_left_to_right(std::vector<std::vector<day8::Tree *>> *forest, int n);
