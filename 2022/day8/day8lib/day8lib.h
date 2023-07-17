@@ -13,6 +13,10 @@ enum class Sightline {
     BotToTop,
 };
 
+const std::vector<day8::Sightline> SightlineValues = {
+    day8::Sightline::RightToLeft, day8::Sightline::LeftToRight,
+    day8::Sightline::TopToBot, day8::Sightline::BotToTop};
+
 class Tree {
   public:
     int                                 height;
