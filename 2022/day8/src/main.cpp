@@ -40,6 +40,8 @@ int main() {
     std::cout << "There are " << forest->get_num_trees_visible()
               << " visible trees" << std::endl;
 
+    delete forest;
+
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
     _CrtDumpMemoryLeaks();
 }

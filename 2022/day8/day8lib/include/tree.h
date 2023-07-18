@@ -17,7 +17,6 @@ class Tree {
 
   public:
     Tree(int height);
-    ~Tree();
     bool is_visible();
 
     friend std::ostream &operator<<(std::ostream &out, Tree &tree);
