@@ -1,4 +1,5 @@
 #pragma once
+#include "forest.h"
 #include "sightline.h"
 #include "tree.h"
 #include <iostream>
@@ -9,9 +10,9 @@
 
 namespace day8 {
 
-void check_left_to_right(std::vector<std::vector<day8::Tree *>> *forest, int n);
-void check_right_to_left(std::vector<std::vector<day8::Tree *>> *forest, int n);
-void check_top_to_bot(std::vector<std::vector<day8::Tree *>> *forest, int n);
-void check_bot_to_top(std::vector<std::vector<day8::Tree *>> *forest, int n);
+void check_left_to_right(day8::Forest *forest);
+void check_right_to_left(day8::Forest *forest);
+void check_top_to_bot(day8::Forest *forest);
+void check_bot_to_top(day8::Forest *forest);
 
 } // namespace day8

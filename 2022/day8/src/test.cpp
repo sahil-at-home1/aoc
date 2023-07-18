@@ -5,4 +5,4 @@ using namespace std;
 
 const string testFile = "c:/users/sahil/dev/aoc/2022/day8/ez_input.txt";
 
-TEST(day8test, foo) {}
+TEST(day8test, small) {}
