@@ -10,20 +10,25 @@ day8::Forest::Forest(std::string inputFile) {
     std::string   line;
     std::ifstream f;
 
-    // get the n in n x n grid
+    // open file
     f.open(inputFile);
     if (!f.is_open()) {
         std::cout << "could not open file: " << inputFile << std::endl;
         throw std::exception();
     }
+
+    // get the n in n x n grid
     int n = 0;
     while (getline(f, line)) {
         n += 1;
     }
-    f.close();
     this->n = n;
     this->trees =
         std::vector<std::vector<day8::Tree *>>(n, std::vector<day8::Tree *>(n));
+
+    // reset file cursor to start of file
+    f.clear();
+    f.seekg(0);
 
     // fill in trees
     int row = 0;

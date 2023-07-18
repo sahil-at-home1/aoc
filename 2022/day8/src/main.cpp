@@ -37,6 +37,8 @@ int main() {
         }
     }
 
+    std::cout << *forest << std::endl;
+
     std::cout << "There are " << forest->get_num_trees_visible()
               << " visible trees" << std::endl;
 
