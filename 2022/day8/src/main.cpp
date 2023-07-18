@@ -18,27 +18,9 @@ const std::string inputFile =
 
 int main() {
     day8::Forest *forest = new day8::Forest(inputFile);
-
-    // check vertical sightlines because inner/outer loop swapped
-    for (auto &sightline : day8::SightlineValues) {
-        switch (sightline) {
-        case day8::Sightline::LeftToRight:
-            day8::check_left_to_right(forest);
-            break;
-        case day8::Sightline::RightToLeft:
-            day8::check_right_to_left(forest);
-            break;
-        case day8::Sightline::TopToBot:
-            day8::check_top_to_bot(forest);
-            break;
-        case day8::Sightline::BotToTop:
-            day8::check_bot_to_top(forest);
-            break;
-        }
-    }
+    day8::check_tree_visibilities(forest);
 
     std::cout << *forest << std::endl;
-
     std::cout << "There are " << forest->get_num_trees_visible()
               << " visible trees" << std::endl;
 

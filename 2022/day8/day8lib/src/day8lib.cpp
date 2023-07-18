@@ -7,6 +7,25 @@
 #include <unordered_map>
 #include <vector>
 
+void day8::check_tree_visibilities(day8::Forest *forest) {
+    for (auto &sightline : day8::SightlineValues) {
+        switch (sightline) {
+        case day8::Sightline::LeftToRight:
+            day8::check_left_to_right(forest);
+            break;
+        case day8::Sightline::RightToLeft:
+            day8::check_right_to_left(forest);
+            break;
+        case day8::Sightline::TopToBot:
+            day8::check_top_to_bot(forest);
+            break;
+        case day8::Sightline::BotToTop:
+            day8::check_bot_to_top(forest);
+            break;
+        }
+    }
+}
+
 void day8::check_left_to_right(day8::Forest *forest) {
     int hStart = 0;
     int hEnd = forest->n;
