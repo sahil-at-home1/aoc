@@ -70,7 +70,18 @@ int day8::Forest::get_num_trees_visible() {
     return visibleCount;
 }
 
-int day8::Forest::get_max_scenic_score() { return 0; }
+int day8::Forest::get_max_scenic_score() {
+    int maxScenicScore = 0;
+    for (int row = 0; row < this->n; row++) {
+        for (int col = 0; col < this->n; col++) {
+            int scenicScore = this->get_tree(row, col)->get_scenic_score();
+            if (scenicScore > maxScenicScore) {
+                maxScenicScore = scenicScore;
+            }
+        }
+    }
+    return maxScenicScore;
+}
 
 std::ostream &day8::operator<<(std::ostream &out, day8::Forest &forest) {
     for (auto &sightline : day8::SightlineValues) {
@@ -79,7 +90,9 @@ std::ostream &day8::operator<<(std::ostream &out, day8::Forest &forest) {
             for (int col = 0; col < forest.n; col++) {
                 day8::Tree *tree = forest.get_tree(row, col);
                 std::string vis = tree->visibility[sightline] ? "Y" : "N";
-                out << "(" << tree->height << ":" << vis << ") ";
+                int         sf = tree->scenicFactor[sightline];
+                out << "(" << tree->height << ":" << vis << "[" << sf << "]"
+                    << ") ";
             }
             out << std::endl;
         }

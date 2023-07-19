@@ -15,6 +15,7 @@ TEST(day8test, numTreesVisible) {
 TEST(day8test, maxScenicScore) {
     day8::Forest *forest = new day8::Forest(testFile);
     day8::check_tree_visibilities(forest);
+    std::cout << *forest << std::endl;
     ASSERT_EQ(forest->get_max_scenic_score(), 8);
     delete forest;
 }

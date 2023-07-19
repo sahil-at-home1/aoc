@@ -27,90 +27,136 @@ void day8::check_tree_visibilities(day8::Forest *forest) {
 }
 
 void day8::check_left_to_right(day8::Forest *forest) {
-    int hStart = 0;
-    int hEnd = forest->n;
-    int hInc = 1;
-    int vStart = 0;
-    int vEnd = forest->n;
-    int vInc = 1;
+    auto sl = day8::Sightline::LeftToRight;
+    int  rowStart = 0;
+    int  rowEnd = forest->n;
+    int  rowInc = 1;
+    int  colStart = 0;
+    int  colEnd = forest->n;
+    int  colInc = 1;
 
     int maxHeight = 0;
-    for (int h = hStart; h != hEnd; h += hInc) {
-        for (int v = vStart; v != vEnd; v += vInc) {
-            day8::Tree *tree = forest->get_tree(h, v);
+    int maxHeightPos = 0;
+    for (int row = rowStart; row != rowEnd; row += rowInc) {
+        for (int col = colStart; col != colEnd; col += colInc) {
+            day8::Tree *tree = forest->get_tree(row, col);
             // check if tree is on edge
+            if (col == colStart) {
+                tree->scenicFactor[sl] = 0;
+            }
             // check if tree is taller than all other trees along sightline
-            if (v == vStart || tree->height > maxHeight) {
-                tree->visibility[day8::Sightline::LeftToRight] = true;
+            if (col == colStart || tree->height > maxHeight) {
+                // calculate partial visibility
+                tree->visibility[sl] = true;
                 maxHeight = tree->height;
+                // calculate scenic factor
+                tree->scenicFactor[sl] = col - maxHeightPos;
+                if (tree->scenicFactor[sl] < 0) {
+                    tree->scenicFactor[sl] = tree->scenicFactor[sl] * -1;
+                }
+                maxHeightPos = col;
             }
         }
     }
 }
 
 void day8::check_right_to_left(day8::Forest *forest) {
-    int rowStart = 0;
-    int rowEnd = forest->n;
-    int rowInc = 1;
-    // check last col first
-    int colStart = forest->n - 1;
-    int colEnd = -1;
-    int colInc = -1;
+    auto sl = day8::Sightline::RightToLeft;
+    int  rowStart = 0;
+    int  rowEnd = forest->n;
+    int  rowInc = 1;
+    int  colStart = forest->n - 1;
+    int  colEnd = -1;
+    int  colInc = -1;
 
     int maxHeight = 0;
+    int maxHeightPos = 0;
     for (int row = rowStart; row != rowEnd; row += rowInc) {
-        // sweep across columns for each row, from right to left
         for (int col = colStart; col != colEnd; col += colInc) {
             day8::Tree *tree = forest->get_tree(row, col);
             // check if tree is on edge
+            if (col == colStart) {
+                tree->scenicFactor[sl] = 0;
+            }
             // check if tree is taller than all other trees along sightline
             if (col == colStart || tree->height > maxHeight) {
-                tree->visibility[day8::Sightline::RightToLeft] = true;
+                // calculate partial visibility
+                tree->visibility[sl] = true;
                 maxHeight = tree->height;
+                // calculate scenic factor
+                tree->scenicFactor[sl] = col - maxHeightPos;
+                if (tree->scenicFactor[sl] < 0) {
+                    tree->scenicFactor[sl] = tree->scenicFactor[sl] * -1;
+                }
+                maxHeightPos = col;
             }
         }
     }
 }
 
 void day8::check_top_to_bot(day8::Forest *forest) {
-    int hStart = 0;
-    int hEnd = forest->n;
-    int hInc = 1;
-    int vStart = 0;
-    int vEnd = forest->n;
-    int vInc = 1;
+    auto sl = day8::Sightline::TopToBot;
+    int  rowStart = 0;
+    int  rowEnd = forest->n;
+    int  rowInc = 1;
+    int  colStart = 0;
+    int  colEnd = forest->n;
+    int  colInc = 1;
 
     int maxHeight = 0;
-    for (int v = vStart; v != vEnd; v += vInc) {
-        for (int h = hStart; h != hEnd; h += hInc) {
-            day8::Tree *tree = forest->get_tree(h, v);
+    int maxHeightPos = 0;
+    for (int col = colStart; col != colEnd; col += colInc) {
+        for (int row = rowStart; row != rowEnd; row += rowInc) {
+            day8::Tree *tree = forest->get_tree(row, col);
             // check if tree is on edge
+            if (row == rowStart) {
+                tree->scenicFactor[sl] = 0;
+            }
             // check if tree is taller than all other trees along sightline
-            if (h == hStart || tree->height > maxHeight) {
-                tree->visibility[day8::Sightline::TopToBot] = true;
+            if (row == rowStart || tree->height > maxHeight) {
+                // calculate partial visibility
+                tree->visibility[sl] = true;
                 maxHeight = tree->height;
+                // calculate scenic factor
+                tree->scenicFactor[sl] = col - maxHeightPos;
+                if (tree->scenicFactor[sl] < 0) {
+                    tree->scenicFactor[sl] = tree->scenicFactor[sl] * -1;
+                }
+                maxHeightPos = col;
             }
         }
     }
 }
 
 void day8::check_bot_to_top(day8::Forest *forest) {
-    int hStart = forest->n - 1;
-    int hEnd = -1;
-    int hInc = -1;
-    int vStart = 0;
-    int vEnd = forest->n;
-    int vInc = 1;
+    auto sl = day8::Sightline::BotToTop;
+    int  rowStart = forest->n - 1;
+    int  rowEnd = -1;
+    int  rowInc = -1;
+    int  colStart = 0;
+    int  colEnd = forest->n;
+    int  colInc = 1;
 
     int maxHeight = 0;
-    for (int v = vStart; v != vEnd; v += vInc) {
-        for (int h = hStart; h != hEnd; h += hInc) {
-            day8::Tree *tree = forest->get_tree(h, v);
+    int maxHeightPos = 0;
+    for (int col = colStart; col != colEnd; col += colInc) {
+        for (int row = rowStart; row != rowEnd; row += rowInc) {
+            day8::Tree *tree = forest->get_tree(row, col);
             // check if tree is on edge
+            if (row == rowStart) {
+                tree->scenicFactor[sl] = 0;
+            }
             // check if tree is taller than all other trees along sightline
-            if (h == hStart || tree->height > maxHeight) {
-                tree->visibility[day8::Sightline::BotToTop] = true;
+            if (row == rowStart || tree->height > maxHeight) {
+                // calculate partial visibility
+                tree->visibility[sl] = true;
                 maxHeight = tree->height;
+                // calculate scenic factor
+                tree->scenicFactor[sl] = col - maxHeightPos;
+                if (tree->scenicFactor[sl] < 0) {
+                    tree->scenicFactor[sl] = tree->scenicFactor[sl] * -1;
+                }
+                maxHeightPos = col;
             }
         }
     }
