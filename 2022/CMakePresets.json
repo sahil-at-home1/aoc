@@ -8,12 +8,11 @@
             "generator": "Visual Studio 17 2022",
             "toolset": "host=x86",
             "architecture": "win32",
-            "binaryDir": "${sourceDir}/build/${presetName}",
+            "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
                 "CMAKE_C_COMPILER": "cl.exe",
                 "CMAKE_CXX_COMPILER": "cl.exe",
-                "CMAKE_CXX_FLAGS": "/MDb",
                 "CMAKE_TOOLCHAIN_FILE": {
                     "value": "${sourceDir}/../vcpkg/scripts/buildsystems/vcpkg.cmake",
                     "type": "FILEPATH"
