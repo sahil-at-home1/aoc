@@ -1,12 +1,13 @@
+// clang-format off
 #define _CRTDBG_MAP_ALLOC
-
+#include <stdlib.h>
+#include <crtdbg.h> // order matters
+// clang-format on
 #include "day8lib.h"
-#include <crtdbg.h>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -15,7 +16,8 @@ const std::string inputFile =
     "C:/users/sahil/dev/aoc/2022/day8/input/large.txt";
 
 int main() {
-    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
+    _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
 
     day8::Forest *forest = new day8::Forest(inputFile);
     day8::check_tree_visibilities(forest);
@@ -23,8 +25,6 @@ int main() {
     // std::cout << *forest << std::endl;
     std::cout << "There are " << forest->get_num_trees_visible()
               << " visible trees" << std::endl;
-
-    _CrtDumpMemoryLeaks();
 
     delete forest;
 

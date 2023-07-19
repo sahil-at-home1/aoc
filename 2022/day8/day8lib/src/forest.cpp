@@ -18,11 +18,11 @@ day8::Forest::Forest(std::string inputFile) {
     }
 
     // get the n in n x n grid
-    int n = 0;
+    int lines = 0;
     while (getline(f, line)) {
-        n += 1;
+        lines += 1;
     }
-    this->n = n;
+    this->n = lines;
     this->trees =
         std::vector<std::vector<day8::Tree *>>(n, std::vector<day8::Tree *>(n));
 
