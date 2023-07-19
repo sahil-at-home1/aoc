@@ -3,11 +3,9 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**",
-                // "C:/vcpkg/installed/x86-windows/include",
-                // "C:/vcpkg/packages/gtest_x86-windows/include"
-                "${workspaceFolder}/../vcpkg/installed/x86-windows/include",
-                "${workspaceFolder}/../vcpkg/packages/gtest_x86-windows/include"
+                "${workspaceFolder}/**"
+                // "${workspaceFolder}/../vcpkg/installed/x86-windows/include",
+                // "${workspaceFolder}/../vcpkg/packages/gtest_x86-windows/include"
             ],
             "defines": [
                 "_DEBUG",

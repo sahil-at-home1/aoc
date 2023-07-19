@@ -70,6 +70,8 @@ int day8::Forest::get_num_trees_visible() {
     return visibleCount;
 }
 
+int day8::Forest::get_max_scenic_score() { return 0; }
+
 std::ostream &day8::operator<<(std::ostream &out, day8::Forest &forest) {
     for (auto &sightline : day8::SightlineValues) {
         out << "Checking sightline: " << sightline << std::endl;

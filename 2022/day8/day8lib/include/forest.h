@@ -17,6 +17,7 @@ class Forest {
     ~Forest();
     day8::Tree          *get_tree(int row, int col);
     int                  get_num_trees_visible();
+    int                  get_max_scenic_score();
     friend std::ostream &operator<<(std::ostream &out, day8::Forest &forest);
 };
 
