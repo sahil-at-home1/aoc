@@ -47,12 +47,18 @@ void day8::check_tree_visibilities(day8::Forest *forest) {
                     break;
                 }
                 day8::Tree *tree = forest->get_tree(row, col);
-                // // calculate scenic factor
-                tree->scenicFactor[sl] = 0;
-                for (int k = seen.size() - 1; k > -1; k--) {
-                    day8::Tree *seenTree = seen[0];
-                    if (seenTree->height >= tree->height) {
-                        tree->scenicFactor[sl] = k + 1;
+                // calculate scenic factor
+                if (seen.empty()) {
+                    tree->scenicFactor[sl] = 0;
+                } else {
+                    // walk through seen trees to find first one that blocks sight
+                    tree->scenicFactor[sl] = 0;
+                    for (int k = seen.size() - 1; k > -1; k--) {
+                        day8::Tree *seenTree = seen[k];
+                        tree->scenicFactor[sl] += 1;
+                        if (seenTree->height >= tree->height) {
+                            break;
+                        }
                     }
                 }
                 // check visibility
